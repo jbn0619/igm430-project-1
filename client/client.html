@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Our simple HTTP server</title>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+  <script type="text/babel">
+    // Parse through any JSON coming from the server.
+    const parseJSON = (xhr, content) => {
+      const obj = JSON.parse(xhr.response);
+      console.dir(obj);
+
+      if (obj.message) {
+        const p = document.createElement('p');
+        p.textContent = `Message: ${obj.message}`;
+        content.appendChild(p);
+      }
+
+      if (obj.id) {
+        const p = document.createElement('p');
+        p.textContent = `ID: ${obj.id}`;
+        content.appendChild(p);
+      }
+    };
+
+    // Parse any XML coming from the server.
+    const parseXML = (xhr, content) => {
+      const xml = xhr.response;
+
+      content.innerHTML = xml;
+    };
+
+    // Parse through a user object if getUsers is called.
+    const parseUsers = (xhr, content) => {
+      const obj = JSON.parse(xhr.response);
+      console.dir(obj);
+
+      for (const u in obj) {
+        let user = obj[u];
+        console.log(user);
+        const p1 = document.createElement('p');
+        p1.textContent = `Name: ${user.name}`;
+        content.appendChild(p1);
+
+        const p2 = document.createElement('p');
+        p2.textContent = `Age: ${user.age}`;
+        content.appendChild(p2);
+      }
+    };
+
+    const handleResponse = (xhr) => {
+      const content = document.querySelector('#content');
+      const responseType = xhr.getResponseHeader('Content-Type');
+      const p = document.createElement('p');
+      content.innerHTML = '';
+
+      // Determine what to do based-on the server's feedback of our request.
+      switch (xhr.status) {
+        case 200:
+          if (xhr.response) parseUsers(xhr, content);
+          else {
+            p.textContent = 'Success!';
+            content.appendChild(p);
+          }
+          break;
+        case 201:
+          p.textContent = 'Created new user!';
+          content.appendChild(p);
+          break;
+        case 204:
+          p.textContent = 'Updated existing user!';
+          content.appendChild(p);
+          break;
+        case 400:
+          p.textContent = 'Missing user params. Could not process data.';
+          content.appendChild(p);
+          break;
+        case 404:
+          if (xhr.content) parseJSON(xhr, content);
+          else {
+            p.textContent = 'Resource not found.';
+            content.appendChild(p);
+          }
+          break;
+      }
+    };
+
+    // Send GET/HEAD information to the server.
+    const sendGet = (e) => {
+      e.preventDefault();
+
+      const urlField = document.querySelector('#urlField');
+      const methodField = document.querySelector('#methodSelect');
+
+      const xhr = new XMLHttpRequest();
+      xhr.open(methodField.value, urlField.value);
+
+      xhr.setRequestHeader('Accept', 'application/json');
+
+      xhr.onload = () => handleResponse(xhr);
+      
+      xhr.send();
+    };
+
+    // Send the user's data to the server with a POST request.
+    const sendPost = (e) => {
+      e.preventDefault();
+
+      const nameInput = nameForm.querySelector('#nameField');
+      const ageInput = nameForm.querySelector('#ageField');
+      const urlField = document.querySelector('#urlField');
+      const methodField = document.querySelector('#methodSelect');
+      
+      const xhr = new XMLHttpRequest();
+
+      xhr.open('POST', '/addUser');
+
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader ('Accept', 'application/json');
+
+      xhr.onload = () => handleResponse(xhr);
+
+      const newUser = `name=${nameInput.value}&age=${ageInput.value}`;
+      
+      xhr.send(newUser);
+    
+      return false;
+    };
+
+    const init = () => {
+      const submitButton = document.querySelector('#submit');
+      const postButton = document.querySelector('#postSubmit');
+
+      const getPage = (e) => sendGet(e);
+      const postPage = (e) => sendPost(e);
+
+      submitButton.addEventListener('click', getPage);
+      postButton.addEventListener('click', postPage);
+    };
+
+    window.onload = init;
+  </script>
+</head>
+<body>
+  <section id="top">
+    <h3>POST Status Code Tests</h3>
+    <form id="nameForm" action="/addUser" method="post">
+      <label for="name">Name: </label>
+      <input id="nameField" type="text" name="name" />
+      <label for="age">Age: </label>
+      <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
+      <input id="postSubmit" type="submit" value="Add User" />
+    </form>
+    <form id="userForm" action="/getUsers" method="get">
+      <select id='urlField'>
+        <option value='/getUsers'>/getUsers</option>
+        <option value='/notReal'>/notReal</option>
+      </select>
+      <select id="methodSelect">
+        <option value="get">GET</option>
+        <option value="head">HEAD</option>
+      </select>
+      <input id="submit" type="submit" value="Get User" />
+    </form>
+  </section>
+  <section id="content">
+  </section>
+  <footer>
+    <p>Credits:</p>
+    <ul>
+      <li>Austin Willoughby and Cody Van de Mark for POST data-processing code from the following repo: https://github.com/IGM-RichMedia-at-RIT/body-parse-example-done</li>
+      <li>Austin Willoughby and Cody Van de Mark for the API assignment part 1 and 2 starter code.</li>
+    </ul>
+  </footer>
+</body>
+</html>
