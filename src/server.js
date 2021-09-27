@@ -11,6 +11,8 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 const urlDictionary = {
   GET: {
     '/': htmlHandler.getIndex,
+    '/search':htmlHandler.getSearch,
+    '/deckBuilder':htmlHandler.deckBuilder,
     '/style.css': htmlHandler.getCSS,
     '/success': getHandler.getSuccess,
     '/badRequest': getHandler.getBadRequest,

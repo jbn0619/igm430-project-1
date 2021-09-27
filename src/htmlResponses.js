@@ -2,6 +2,8 @@ const fs = require('fs');
 
 const index = fs.readFileSync(`${__dirname}/../client/client.html`);
 const css = fs.readFileSync(`${__dirname}/../client/style.css`);
+const search = fs.readFileSync(`${__dirname}/../client/search.html`);
+const deckbuild = fs.readFileSync(`${__dirname}/../client/deckBuilder.html`);
 
 const getIndex = (request, response) => {
   response.writeHead(200, { 'Content-Type': 'text/html' });
@@ -15,7 +17,21 @@ const getCSS = (request, response) => {
   response.end();
 };
 
+const getSearch = (request,response) =>{
+  response.writeHead(200,{'Content-Type':'text/html'});
+  response.write(search);
+  response.end();
+};
+
+const deckBuilder = (request,response) =>{
+  response.writeHead(200,{'Content-Type':'text/html'});
+  response.write(deckbuild);
+  response.end();
+};
+
 module.exports = {
   getIndex,
   getCSS,
+  getSearch,
+  deckBuilder,
 };
