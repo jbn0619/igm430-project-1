@@ -1,6 +1,6 @@
 const url = require('url');
 
-const users = {};
+const decks = {};
 
 // Builds a response with a JSON object
 const buildJSON = (request, response, message, id) => {
@@ -150,7 +150,7 @@ const getNotImplemented = (request, response) => {
 // #region Part 2 Methods
 
 const getUsers = (request, response) => {
-  buildResponse(request, response, JSON.stringify(users), 200);
+  buildResponse(request, response, JSON.stringify(decks), 200);
 };
 
 // #endregion
@@ -175,5 +175,5 @@ module.exports = {
   buildJSON,
   buildXML,
   buildResponse,
-  users,
+  decks,
 };
