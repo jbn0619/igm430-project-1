@@ -4,6 +4,7 @@ const htmlHandler = require('./htmlResponses');
 const getHandler = require('./getResponses');
 const postHandler = require('./postResponses');
 const headHandler = require('./headResponses');
+const deleteHandler = require('./deleteResponses');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
@@ -33,6 +34,10 @@ const urlDictionary = {
     '/addUser': postHandler.addUser,
     notFound: getHandler.getNotFound,
   },
+  DELETE:{
+    '/clearDeck':deleteHandler.deleteDeck,
+    notFound:getHandler.getNotFound,
+  }
 };
 
 // Parses URL and determines what kind of operation the API is handling.
