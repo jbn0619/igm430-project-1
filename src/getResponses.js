@@ -139,7 +139,16 @@ const getNotImplemented = (request, response) => {
 // #region Part 2 Methods
 
 const getDecks = (request, response, deckName) => {
-  buildResponse(request, response, JSON.stringify(decks[deckName]), 200);
+  if(deckName){
+    buildResponse(request, response, JSON.stringify(decks[deckName]), 200);
+  }
+  else{
+    const object ={
+      message:"No deckname was specified. Enter a deckname and try again.",
+      id:"missingParams",
+    };
+    buildResponse(request,response,JSON.stringify(object),400);
+  }
 };
 
 // #endregion
