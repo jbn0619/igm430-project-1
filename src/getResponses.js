@@ -33,10 +33,7 @@ const getSuccess = (request, response) => {
   // Begin building response message
   const message = 'This is a successful response.';
   const id = '';
-  let responseString;
-
-  if (acceptedTypes[0] === 'text/xml') responseString = buildXML(request, response, message, id);
-  else responseString = buildJSON(request, response, message, id);
+  let responseString = buildJSON(request, response, message, id);
 
   buildResponse(request, response, responseString, 200);
 };
@@ -60,10 +57,7 @@ const getBadRequest = (request, response) => {
     statusCode = 400;
   }
 
-  let responseString;
-
-  if (acceptedTypes[0] === 'text/xml') responseString = buildXML(request, response, message, id);
-  else responseString = buildJSON(request, response, message, id);
+  let responseString = buildJSON(request, response, message, id);
 
   buildResponse(request, response, responseString, statusCode);
 };
@@ -87,10 +81,7 @@ const getUnauthorized = (request, response) => {
     statusCode = 401;
   }
 
-  let responseString;
-
-  if (acceptedTypes[0] === 'text/xml') responseString = buildXML(request, response, message, id);
-  else responseString = buildJSON(request, response, message, id);
+  let responseString = buildJSON(request, response, message, id);
 
   buildResponse(request, response, responseString, statusCode);
 };
@@ -100,10 +91,7 @@ const getForbidden = (request, response) => {
 
   const message = 'You do not have access to this content.';
   const id = 'forbidden';
-  let responseString;
-
-  if (acceptedTypes[0] === 'text/xml') responseString = buildXML(request, response, message, id);
-  else responseString = buildJSON(request, response, message, id);
+  let responseString = buildJSON(request, response, message, id);
 
   buildResponse(request, response, responseString, 403);
 };
@@ -113,10 +101,7 @@ const getInternal = (request, response) => {
 
   const message = 'Internal Server Error. Something went wrong.';
   const id = 'internalError';
-  let responseString;
-
-  if (acceptedTypes[0] === 'text/xml') responseString = buildXML(request, response, message, id);
-  else responseString = buildJSON(request, response, message, id);
+  let responseString = buildJSON(request, response, message, id);
 
   buildResponse(request, response, responseString, 500);
 };
@@ -126,10 +111,7 @@ const getNotImplemented = (request, response) => {
 
   const message = 'A get request for this page has not been implemented yet. Check again later for updated content.';
   const id = 'notImplemented';
-  let responseString;
-
-  if (acceptedTypes[0] === 'text/xml') responseString = buildXML(request, response, message, id);
-  else responseString = buildJSON(request, response, message, id);
+  let responseString = buildJSON(request, response, message, id);
 
   buildResponse(request, response, responseString, 501);
 };
@@ -162,7 +144,6 @@ module.exports = {
   getDecks,
   getNotFound,
   buildJSON,
-  buildXML,
   buildResponse,
   decks,
 };
