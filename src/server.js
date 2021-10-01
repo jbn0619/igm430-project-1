@@ -1,5 +1,6 @@
 const http = require('http');
 const url = require('url');
+const query = require('querystring');
 const htmlHandler = require('./htmlResponses');
 const getHandler = require('./getResponses');
 const postHandler = require('./postResponses');
@@ -21,7 +22,7 @@ const urlDictionary = {
     '/forbidden': getHandler.getForbidden,
     '/internal': getHandler.getInternal,
     '/notImplemented': getHandler.getNotImplemented,
-    '/getUsers': getHandler.getUsers,
+    '/getDecks': getHandler.getDecks,
     '/notReal': getHandler.getNotFound,
     notFound: getHandler.getNotFound,
   },
@@ -43,9 +44,10 @@ const urlDictionary = {
 // Parses URL and determines what kind of operation the API is handling.
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
+  const params = query.parse(parsedUrl);
 
   if (urlDictionary[request.method][parsedUrl.pathname]) {
-    urlDictionary[request.method][parsedUrl.pathname](request, response);
+    urlDictionary[request.method][parsedUrl.pathname](request, response, params[0]);
   } else {
     urlDictionary[request.method].notFound(request, response);
   }

@@ -17,20 +17,9 @@ const buildJSON = (request, response, message, id) => {
   return JSON.stringify(jsonObj);
 };
 
-// Builds a response out of xml
-const buildXML = (request, response, message, id) => {
-  let xmlString = `<response><message>${message}</message></response>`;
-  if (id !== '') {
-    xmlString = `<response><message>${message}</message><id>${id}</id></response>`;
-  }
-
-  return xmlString;
-};
-
 // Builds a response with all of the assembled components.
-const buildResponse = (request, response, responseString, responseNum) => {
-  const acceptedTypes = request.headers.accept.split(',');
-  response.writeHead(responseNum, { 'Content-Type': acceptedTypes[0] });
+const buildResponse = (request, response, responseString, status) => {
+  response.writeHead(status, { 'Content-Type': 'application/json' });
   response.write(responseString);
   response.end();
 };
@@ -149,8 +138,8 @@ const getNotImplemented = (request, response) => {
 
 // #region Part 2 Methods
 
-const getUsers = (request, response) => {
-  buildResponse(request, response, JSON.stringify(decks), 200);
+const getDecks = (request, response, deckName) => {
+  buildResponse(request, response, JSON.stringify(decks[deckName]), 200);
 };
 
 // #endregion
@@ -170,7 +159,7 @@ module.exports = {
   getForbidden,
   getInternal,
   getNotImplemented,
-  getUsers,
+  getDecks,
   getNotFound,
   buildJSON,
   buildXML,

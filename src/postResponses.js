@@ -1,7 +1,7 @@
 const query = require('querystring');
 const getHandler = require('./getResponses');
 
-const addUser = (request, response) => {
+const addDeck = (request, response) => {
   // THIS SECTION OF THE CODE WAS TAKEN AND ADAPTED FROM AN EXAMPLE REPO IN 430
   // GITHUB LINK: https://github.com/IGM-RichMedia-at-RIT/body-parse-example-done
   const body = [];
@@ -104,6 +104,6 @@ const addCard = (request,response) =>{
 }
 
 module.exports = {
-  addUser,
+  addDeck,
   addCard,
 };
