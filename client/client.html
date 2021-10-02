@@ -2,11 +2,15 @@
 <html lang="en">
 <head>
   <title>Our simple HTTP server</title>
-  <link rel="stylesheet" type="text/css" href="/style.css">
+  
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!--Bootstrap scripts for later use-->
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <link rel="stylesheet" type="text/css" href="/style.css">
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
@@ -147,7 +151,10 @@
     };
 
     const searchDeck = (e) => {
+      // First, grab the search input's value.
+      const searchValue = document.getElementById('searchInput').value;
 
+      xhr.open('POST', '/searchDeck');
     };
 
     const buildDeck = (e) => {
@@ -164,16 +171,25 @@
 
     };
 
-    const init = () => {
+    const initNavBar = () => {
       const searchButton = document.getElementById('searchButton');
-      const buildDeckButton = document.getElementById('buildDeckButton');
+      const buildDeckButton = document.querySelector('.deckBuildBtn');
 
       const getSearchPage = (e) => searchDeck(e);
       const getBuildPage = (e) => buildDeck(e);
-      //const getSelectedDeck = (e) => loadDeck(e);
 
       searchButton.addEventListener('click', getSearchPage);
-      //buildDeckButton.addEventListener('click', getBuildPage);
+      buildDeckButton.addEventListener('click', getBuildPage);
+    }
+
+    const init = () => {
+      initNavBar();
+
+      const openDeckButtons = document.querySelectorAll('.deckBuildBtn');
+      const getOpenDeckPage = (e) => loadDeck(e);
+      openDeckButtons.forEach((item, index) => {
+        item.addEventListener('click', getOpenDeckPage);
+      });
     };
 
     window.onload = init;
@@ -181,18 +197,31 @@
 </head>
 <body>
   <h2>MTG Deck Builder</h2>
-  <nav class="navbar navbar-default">
-    <a class="btn btn-default navbar-btn  navbar-left" href="deckBuilder">Build Deck</a>
-    <form class="navbar-form" role="search">
-      <div class="form-group">
-        <input type="text" class="ml-4 form-control" placeholder="Search">
-      </div>
-      <button id="searchButton" type="submit" class="btn btn-default">Search</button>
-    </form>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link deckBuildBtn" href="deckBuilder">Build Deck</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button id="searchButton" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
   </nav>
 
   <section id="browse">
-
+    <div class="card border border-primary" style="width: 10%">
+      <div class="card-body">
+        <h5 class="card-title">Deck title</h5>
+        <p class="card-text">An example card for decks when we enable browsing for them.</p>
+        <a href="deckBuilder" class="btn btn-primary openDeckBtn">Open Deck.</a>
+      </div>
+    </div>
   </section>
   <footer>
     <section id="credits">

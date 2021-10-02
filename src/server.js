@@ -33,6 +33,8 @@ const urlDictionary = {
   },
   POST: {
     '/addUser': postHandler.addUser,
+    '/searchDeck': postHandler.searchDeck,
+    '/openDeck': postHandler.openDeck,
     notFound: getHandler.getNotFound,
   },
   DELETE:{

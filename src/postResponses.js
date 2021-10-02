@@ -103,7 +103,17 @@ const addCard = (request,response) =>{
   })
 }
 
+const searchDeck = (request, response) => {
+
+};
+
+const openDeck = (reqeust, response) => {
+
+};
+
 module.exports = {
   addDeck,
   addCard,
+  searchDeck,
+  openDeck,
 };
