@@ -31,13 +31,6 @@
       }
     };
 
-    // Parse any XML coming from the server.
-    const parseXML = (xhr, content) => {
-      const xml = xhr.response;
-
-      content.innerHTML = xml;
-    };
-
     // Parse through a user object if getUsers is called.
     const parseUsers = (xhr, content) => {
       const obj = JSON.parse(xhr.response);
@@ -88,6 +81,36 @@
           else {
             p.textContent = 'Resource not found.';
             content.appendChild(p);
+          }
+          break;
+      }
+    };
+
+    const loadDeckText = (xhr) =>{
+      const content = document.querySelector('#content');
+      const h2 = document.createElement('h2');
+      const ul = document.createElement('ul');
+      content.innerHTML="";
+
+      switch(xhr.status){
+        case 200:
+          if(xhr.response){
+            const obj = JSON.parse(xhr.response);
+            h2.innerHTML=obj.deckName;
+            content.appendChild(h2);
+            for(const card in obj.decklist){
+              const li = document.createElement('li');
+              li.innerHTML=card.cardName+" #: "+card.quantity;
+              ul.appendChild(li);
+            }
+            content.appendChild(ul);
+          }
+          break;
+        case 400:
+          if(xhr.response){
+            const obj=JSON.parse(xhr.response);
+            h2.innerHTML=obj.message;
+            content.appendChild(h2);
           }
           break;
       }
@@ -168,7 +191,7 @@
       const xhr = new XMLHttpRequest();
       xhr.open('GET',`/getDecks${deckName}`);
       xhr.setRequestHeader('Accept','application/json');
-      xhr.onload = () => handleResponse(xhr);
+      xhr.onload = () => loadDeckText(xhr);
       xhr.send(deckName);
     };
 
