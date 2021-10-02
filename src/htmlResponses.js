@@ -17,14 +17,14 @@ const getCSS = (request, response) => {
   response.end();
 };
 
-const getSearch = (request,response) =>{
-  response.writeHead(200,{'Content-Type':'text/html'});
+const getSearch = (request, response) => {
+  response.writeHead(200, { 'Content-Type': 'text/html' });
   response.write(search);
   response.end();
 };
 
-const deckBuilder = (request,response) =>{
-  response.writeHead(200,{'Content-Type':'text/html'});
+const deckBuilder = (request, response) => {
+  response.writeHead(200, { 'Content-Type': 'text/html' });
   response.write(deckbuild);
   response.end();
 };

@@ -53,8 +53,8 @@ const addDeck = (request, response) => {
   });
 };
 
-const addCard = (request,response) =>{
-  const card =[];
+const addCard = (request, response) => {
+  const card = [];
 
   // Check for errors.
   request.on('error', (err) => {
@@ -68,11 +68,11 @@ const addCard = (request,response) =>{
     card.push(chunk);
   });
 
-  request.on('end',()=>{
+  request.on('end', () => {
     const cardString = Buffer.concat(card).toString();
     const cardParams = query.parse(cardString);
 
-    if(getHandler.decks[cardParams.deckName].decklist[cardParams.cardName]){
+    if (getHandler.decks[cardParams.deckName].decklist[cardParams.cardName]) {
       getHandler.decks[cardParams.deckName].decklist[cardParams.cardName].quantity++;
 
       response.writeHead(204, { 'Content-Type': 'application/json' });
@@ -81,9 +81,8 @@ const addCard = (request,response) =>{
       };
       response.write(JSON.stringify(responseObj));
       response.end();
-    }
-    else if(getHandler.decks[cardParams.deckName] && cardParams.cardName){
-      getHandler.decks[cardParams.deckName].decklist[cardParams.cardName]=cardParams;
+    } else if (getHandler.decks[cardParams.deckName] && cardParams.cardName) {
+      getHandler.decks[cardParams.deckName].decklist[cardParams.cardName] = cardParams;
 
       response.writeHead(201, { 'Content-Type': 'application/json' });
       const responseObj = {
@@ -91,8 +90,7 @@ const addCard = (request,response) =>{
       };
       response.write(JSON.stringify(responseObj));
       response.end();
-    }
-    else{
+    } else {
       response.writeHead(400, { 'Content-Type': 'application/json' });
       const responseObj = {
         message: 'Missing required parameters.',
@@ -100,14 +98,14 @@ const addCard = (request,response) =>{
       response.write(JSON.stringify(responseObj));
       response.end();
     }
-  })
-}
+  });
+};
 
 const searchDeck = (request, response) => {
 
 };
 
-const openDeck = (reqeust, response) => {
+const openDeck = (request, response) => {
 
 };
 

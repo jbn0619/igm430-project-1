@@ -33,7 +33,7 @@ const getSuccess = (request, response) => {
   // Begin building response message
   const message = 'This is a successful response.';
   const id = '';
-  let responseString = buildJSON(request, response, message, id);
+  const responseString = buildJSON(request, response, message, id);
 
   buildResponse(request, response, responseString, 200);
 };
@@ -57,7 +57,7 @@ const getBadRequest = (request, response) => {
     statusCode = 400;
   }
 
-  let responseString = buildJSON(request, response, message, id);
+  const responseString = buildJSON(request, response, message, id);
 
   buildResponse(request, response, responseString, statusCode);
 };
@@ -81,7 +81,7 @@ const getUnauthorized = (request, response) => {
     statusCode = 401;
   }
 
-  let responseString = buildJSON(request, response, message, id);
+  const responseString = buildJSON(request, response, message, id);
 
   buildResponse(request, response, responseString, statusCode);
 };
@@ -91,7 +91,7 @@ const getForbidden = (request, response) => {
 
   const message = 'You do not have access to this content.';
   const id = 'forbidden';
-  let responseString = buildJSON(request, response, message, id);
+  const responseString = buildJSON(request, response, message, id);
 
   buildResponse(request, response, responseString, 403);
 };
@@ -101,7 +101,7 @@ const getInternal = (request, response) => {
 
   const message = 'Internal Server Error. Something went wrong.';
   const id = 'internalError';
-  let responseString = buildJSON(request, response, message, id);
+  const responseString = buildJSON(request, response, message, id);
 
   buildResponse(request, response, responseString, 500);
 };
@@ -111,7 +111,7 @@ const getNotImplemented = (request, response) => {
 
   const message = 'A get request for this page has not been implemented yet. Check again later for updated content.';
   const id = 'notImplemented';
-  let responseString = buildJSON(request, response, message, id);
+  const responseString = buildJSON(request, response, message, id);
 
   buildResponse(request, response, responseString, 501);
 };
@@ -121,22 +121,20 @@ const getNotImplemented = (request, response) => {
 // #region Part 2 Methods
 
 const getDecks = (request, response, deckName) => {
-  if(deckName){
+  if (deckName) {
     buildResponse(request, response, JSON.stringify(decks[deckName]), 200);
-  }
-  else if(!decks[deckName]){
-    const object ={
-      message:"No deck with the given name exists.",
-      id:"noObjectExists",
-    }
-    buildResponse(request,response,JSON.stringify(object),400);
-  }
-  else{
-    const object ={
-      message:"No deckname was specified. Enter a deckname and try again.",
-      id:"missingParams",
+  } else if (!decks[deckName]) {
+    const object = {
+      message: 'No deck with the given name exists.',
+      id: 'noObjectExists',
     };
-    buildResponse(request,response,JSON.stringify(object),400);
+    buildResponse(request, response, JSON.stringify(object), 400);
+  } else {
+    const object = {
+      message: 'No deckname was specified. Enter a deckname and try again.',
+      id: 'missingParams',
+    };
+    buildResponse(request, response, JSON.stringify(object), 400);
   }
 };
 
