@@ -124,6 +124,13 @@ const getDecks = (request, response, deckName) => {
   if(deckName){
     buildResponse(request, response, JSON.stringify(decks[deckName]), 200);
   }
+  else if(!decks[deckName]){
+    const object ={
+      message:"No deck with the given name exists.",
+      id:"noObjectExists",
+    }
+    buildResponse(request,response,JSON.stringify(object),400);
+  }
   else{
     const object ={
       message:"No deckname was specified. Enter a deckname and try again.",

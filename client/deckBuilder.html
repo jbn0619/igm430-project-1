@@ -161,6 +161,17 @@
       xhr.send(newCard);
     };
 
+    const loadDeck = (e,deckName)=>{
+      const deckNameInput = document.querySelector("#deckNameInput");
+      const deckName=`?deckName=${deckNameInput.value}`;
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET',`/getDecks${deckName}`);
+      xhr.setRequestHeader('Accept','application/json');
+      xhr.onload = () => handleResponse(xhr);
+      xhr.send(deckName);
+    };
+
     const initNavBar = () => {
       const searchButton = document.getElementById('searchButton');
       const buildDeckButton = document.querySelector('.deckBuildBtn');
