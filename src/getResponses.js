@@ -128,6 +128,7 @@ const getDecks = (request, response, deckName) => {
   if (sentDeckName !== '') {
     for (let i = 0; i < decks.length; i++) {
       if (decks[i].deckName === sentDeckName) {
+        sentDeckName = '';
         buildResponse(request, response, JSON.stringify(decks[i]), 200);
       }
     }
@@ -182,4 +183,6 @@ module.exports = {
   buildJSON,
   buildResponse,
   decks,
+  sentDeckName,
+  search
 };

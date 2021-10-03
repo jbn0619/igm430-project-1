@@ -97,6 +97,7 @@
     const handleHtmlResponse = (xhr) => {
       switch (xhr.status) {
         case 200:
+          window.open(xhr.content);
           console.log("Success!");
           break;
         case 404:
@@ -167,8 +168,14 @@
       xhr.send();
     };
 
-    const loadDeck = (e) => {
+    const openDeck = (e, deckName) => {
+      const input=`?deckName=${deckName}`;
 
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST',`/openDeck`);
+      xhr.setRequestHeader('Accept','application/json');
+      xhr.onload = () => handleHtmlResponse(xhr);
+      xhr.send(input);
     };
 
     const initNavBar = () => {
@@ -185,9 +192,10 @@
     const init = () => {
       initNavBar();
 
-      const openDeckButtons = document.querySelectorAll('.deckBuildBtn');
-      const getOpenDeckPage = (e) => loadDeck(e);
+      const openDeckButtons = document.querySelectorAll('.openDeckBtn');
       openDeckButtons.forEach((item, index) => {
+        let deckName = item.innerHTML;
+        let getOpenDeckPage = (e, deckName) => openDeck(e, deckName);
         item.addEventListener('click', getOpenDeckPage);
       });
     };
@@ -214,12 +222,12 @@
     </div>
   </nav>
 
-  <section id="browse">
+  <section id="browse" class="d-flex flex-row justify-content-around">
     <div class="card border border-primary" style="width: 10%">
       <div class="card-body">
         <h5 class="card-title">Deck title</h5>
         <p class="card-text">An example card for decks when we enable browsing for them.</p>
-        <a href="deckBuilder" class="btn btn-primary openDeckBtn">Open Deck.</a>
+        <button class="btn btn-primary openDeckBtn">Open Deck.</button>
       </div>
     </div>
   </section>

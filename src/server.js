@@ -14,7 +14,7 @@ const urlDictionary = {
   GET: {
     '/': htmlHandler.getIndex,
     '/search': htmlHandler.getSearch,
-    '/deckBuilder': htmlHandler.deckBuilder,
+    '/deckBuilder': htmlHandler.getDeckBuilder,
     '/style.css': htmlHandler.getCSS,
     '/success': getHandler.getSuccess,
     '/badRequest': getHandler.getBadRequest,

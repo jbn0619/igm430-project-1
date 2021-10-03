@@ -23,7 +23,7 @@ const getSearch = (request, response) => {
   response.end();
 };
 
-const deckBuilder = (request, response) => {
+const getDeckBuilder = (request, response) => {
   response.writeHead(200, { 'Content-Type': 'text/html' });
   response.write(deckbuild);
   response.end();
@@ -33,5 +33,5 @@ module.exports = {
   getIndex,
   getCSS,
   getSearch,
-  deckBuilder,
+  getDeckBuilder,
 };

@@ -157,7 +157,6 @@
       const cardName = document.querySelector('#cardInput').value;
 
       // Display the new card name in the deck list
-      console.log("Here!");
       const deckList = document.querySelectorAll('#deckList');
       const newListItem = document.createElement('li');
       newListItem.innerHTML = `${cardName}`;
@@ -178,7 +177,7 @@
       xhr.send(newCard);
     };
 
-    const loadDeck = (e)=>{
+    const loadDeck = (e)=> {
       const deckNameInput = document.querySelector("#deckNameInput");
       const deckName=`?deckName=${deckNameInput.value}`;
 
@@ -187,6 +186,14 @@
       xhr.setRequestHeader('Accept','application/json');
       xhr.onload = () => loadDeckText(xhr);
       xhr.send(deckName);
+    };
+
+    const initLoadDeck = () => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET',`/getDecks`);
+      xhr.setRequestHeader('Accept','application/json');
+      xhr.onload = () => loadDeckText(xhr);
+      xhr.send();
     };
 
     const initNavBar = () => {
@@ -211,6 +218,9 @@
       initNavBar();
 
       initBuildDeck();
+
+      // Check if there are any decks already opened. If so, load it.
+      initLoadDeck();
       
       //saveDeckButton.addEventListener('click', postSaveDeck);
     };
@@ -224,10 +234,10 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home</a>
+            <a class="nav-link" href="/">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link deckBuildBtn" href="deckBuilder">Build Deck</a>
+            <a class="nav-link deckBuildBtn" href="#">Build Deck</a>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
