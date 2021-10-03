@@ -97,7 +97,7 @@ const searchDeck = (request, response) => {
 
 };
 
-const openDeck = (reqeust, response) => {
+const openDeck = (request, response) => {
 
 };
 

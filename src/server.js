@@ -13,8 +13,8 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 const urlDictionary = {
   GET: {
     '/': htmlHandler.getIndex,
-    '/search':htmlHandler.getSearch,
-    '/deckBuilder':htmlHandler.deckBuilder,
+    '/search': htmlHandler.getSearch,
+    '/deckBuilder': htmlHandler.deckBuilder,
     '/style.css': htmlHandler.getCSS,
     '/success': getHandler.getSuccess,
     '/badRequest': getHandler.getBadRequest,
@@ -39,10 +39,10 @@ const urlDictionary = {
     '/openDeck': postHandler.openDeck,
     notFound: getHandler.getNotFound,
   },
-  DELETE:{
-    '/clearDeck':deleteHandler.deleteDeck,
-    notFound:getHandler.getNotFound,
-  }
+  DELETE: {
+    '/clearDeck': deleteHandler.deleteDeck,
+    notFound: getHandler.getNotFound,
+  },
 };
 
 // Parses URL and determines what kind of operation the API is handling.
