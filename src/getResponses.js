@@ -1,6 +1,8 @@
 const url = require('url');
 
-const decks = {};
+const decks = [];
+const search = '';
+const sentDeckName = '';
 
 // Builds a response with a JSON object
 const buildJSON = (request, response, message, id) => {
@@ -121,23 +123,40 @@ const getNotImplemented = (request, response) => {
 // #region Part 2 Methods
 
 const getDecks = (request, response, deckName) => {
-  if(deckName){
-    buildResponse(request, response, JSON.stringify(decks[deckName]), 200);
-  }
-  else if(!decks[deckName]){
-    const object ={
-      message:"No deck with the given name exists.",
-      id:"noObjectExists",
+
+  // If someone sent in a deck already then load that deck instead.
+  if (sentDeckName !== '') {
+    for (let i = 0; i < decks.length; i++) {
+      if (decks[i].deckName === sentDeckName) {
+        buildResponse(request, response, JSON.stringify(decks[i]), 200);
+      }
     }
-    buildResponse(request,response,JSON.stringify(object),400);
   }
-  else{
+
+  for (let i = 0; i < decks.length; i++) {
+    if (decks[i].deckName === deckName) {
+      buildResponse(request, response, JSON.stringify(decks[i]), 200);
+    }
+  }
+
+  if (!deckName) {
     const object ={
       message:"No deckname was specified. Enter a deckname and try again.",
       id:"missingParams",
     };
     buildResponse(request,response,JSON.stringify(object),400);
   }
+  else {
+    const object ={
+      message:"No deck with the given name exists.",
+      id:"noObjectExists",
+    }
+    buildResponse(request,response,JSON.stringify(object),400);
+  }
+};
+
+const getAllDecks = (request, response) => {
+
 };
 
 // #endregion
@@ -158,6 +177,7 @@ module.exports = {
   getInternal,
   getNotImplemented,
   getDecks,
+  getAllDecks,
   getNotFound,
   buildJSON,
   buildResponse,

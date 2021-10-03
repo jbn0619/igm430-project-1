@@ -23,6 +23,8 @@ const urlDictionary = {
     '/internal': getHandler.getInternal,
     '/notImplemented': getHandler.getNotImplemented,
     '/getDecks': getHandler.getDecks,
+    '/getAllDecks': getHandler.getAllDecks,
+    '/getSearchParams': getHandler.getSearchParams,
     '/notReal': getHandler.getNotFound,
     notFound: getHandler.getNotFound,
   },
@@ -32,7 +34,7 @@ const urlDictionary = {
     notFound: headHandler.getNotFoundHead,
   },
   POST: {
-    '/addUser': postHandler.addUser,
+    '/addCard': postHandler.addDeck,
     '/searchDeck': postHandler.searchDeck,
     '/openDeck': postHandler.openDeck,
     notFound: getHandler.getNotFound,

@@ -23,18 +23,58 @@ const addDeck = (request, response) => {
     // Piece together the new user.
     const bodyString = Buffer.concat(body).toString();
     const bodyParams = query.parse(bodyString);
+    console.dir(getHandler.decks);
+    let doesExist = false;
+    let existingDeckIndex = -1;
 
-    if (getHandler.decks[bodyParams.deckName]) { // If the user already exists, update them.
-      getHandler.decks[bodyParams.deckName] = bodyParams;
+    // Check if the deck already exists in our database.
+    for (let i = 0; i < getHandler.decks.length; i++) {
+      if (getHandler.decks[i].deckName === bodyParams.deckName) {
+        doesExist = true;
+        existingDeckIndex = i;
+      } 
+    }
 
+    if (doesExist) { // If the user already exists, update them.
+      const deck = getHandler.decks[existingDeckIndex];
+      
+      // Check if the added card already exists. If not, add it.
+      let isNewCard = true;
+      for (let j = 0; j < deck.deckList.length; j++) {
+        if (deck.deckList[j].cardName === bodyParams.cardName) {
+          isNewCard = false;
+          deck.deckList[j].quantity ++;
+        }
+      }
+
+      if (isNewCard) {
+        const newCard = {
+          'cardName': bodyParams.cardName,
+          'quantity': 1,
+        }
+        deck.deckList.push(newCard);
+      }
+
+      getHandler.decks[existingDeckIndex] = deck;
+
+      console.dir(deck);
       response.writeHead(204, { 'Content-Type': 'application/json' });
       const responseObj = {
         message: 'Updated!',
       };
       response.write(JSON.stringify(responseObj));
       response.end();
-    } else if (bodyParams.deckName && bodyParams.decklist) { // If both fields are full, create a new user.
-      getHandler.decks[bodyParams.deckName] = bodyParams;
+    } else if (bodyParams.deckName && bodyParams.cardName && doesExist === false) { // If both fields are full, create a new user.
+      const jsonDeck = {
+        'deckName': bodyParams.deckName,
+        'deckList': [
+          {
+            'cardName': bodyParams.cardName,
+            'quantity': 1,
+          },
+        ]
+      };
+      getHandler.decks.push(jsonDeck);
 
       response.writeHead(201, { 'Content-Type': 'application/json' });
       const responseObj = {
@@ -53,56 +93,6 @@ const addDeck = (request, response) => {
   });
 };
 
-const addCard = (request,response) =>{
-  const card =[];
-
-  // Check for errors.
-  request.on('error', (err) => {
-    console.dir(err);
-    response.statusCode = 400;
-    response.end();
-  });
-
-  // Bundle all the data bytes together.
-  request.on('data', (chunk) => {
-    card.push(chunk);
-  });
-
-  request.on('end',()=>{
-    const cardString = Buffer.concat(card).toString();
-    const cardParams = query.parse(cardString);
-
-    if(getHandler.decks[cardParams.deckName].decklist[cardParams.cardName]){
-      getHandler.decks[cardParams.deckName].decklist[cardParams.cardName].quantity++;
-
-      response.writeHead(204, { 'Content-Type': 'application/json' });
-      const responseObj = {
-        message: 'Updated!',
-      };
-      response.write(JSON.stringify(responseObj));
-      response.end();
-    }
-    else if(getHandler.decks[cardParams.deckName] && cardParams.cardName){
-      getHandler.decks[cardParams.deckName].decklist[cardParams.cardName]=cardParams;
-
-      response.writeHead(201, { 'Content-Type': 'application/json' });
-      const responseObj = {
-        message: 'Success!',
-      };
-      response.write(JSON.stringify(responseObj));
-      response.end();
-    }
-    else{
-      response.writeHead(400, { 'Content-Type': 'application/json' });
-      const responseObj = {
-        message: 'Missing required parameters.',
-      };
-      response.write(JSON.stringify(responseObj));
-      response.end();
-    }
-  })
-}
-
 const searchDeck = (request, response) => {
 
 };
@@ -113,7 +103,6 @@ const openDeck = (reqeust, response) => {
 
 module.exports = {
   addDeck,
-  addCard,
   searchDeck,
   openDeck,
 };

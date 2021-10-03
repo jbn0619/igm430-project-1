@@ -57,38 +57,24 @@
     };
 
     const handleResponse = (xhr) => {
-      const content = document.querySelector('#content');
       const responseType = xhr.getResponseHeader('Content-Type');
-      const p = document.createElement('p');
-      content.innerHTML = '';
 
       // Determine what to do based-on the server's feedback of our request.
       switch (xhr.status) {
         case 200:
-          if (xhr.response) parseUsers(xhr, content);
-          else {
-            p.textContent = 'Success!';
-            content.appendChild(p);
-          }
+
           break;
         case 201:
-          p.textContent = 'Created new user!';
-          content.appendChild(p);
+
           break;
         case 204:
-          p.textContent = 'Updated existing user!';
-          content.appendChild(p);
+
           break;
         case 400:
-          p.textContent = 'Missing user params. Could not process data.';
-          content.appendChild(p);
+
           break;
         case 404:
-          if (xhr.content) parseJSON(xhr, content);
-          else {
-            p.textContent = 'Resource not found.';
-            content.appendChild(p);
-          }
+
           break;
       }
     };
@@ -147,6 +133,14 @@
       const deckName = document.querySelector('#deckNameInput').value;
       const cardName = document.querySelector('#cardInput').value;
 
+      // Display the new card name in the deck list
+      console.log("Here!");
+      const deckList = document.querySelectorAll('#deckList');
+      const newListItem = document.createElement('li');
+      newListItem.innerHTML = `${cardName}`;
+      newListItem.classList.add('list-group-item');
+      document.getElementById('deckList').appendChild(newListItem);
+
       const xhr = new XMLHttpRequest();
 
       xhr.open('POST', '/addCard');
@@ -161,7 +155,7 @@
       xhr.send(newCard);
     };
 
-    const loadDeck = (e,deckName)=>{
+    const loadDeck = (e)=>{
       const deckNameInput = document.querySelector("#deckNameInput");
       const deckName=`?deckName=${deckNameInput.value}`;
 
@@ -186,6 +180,8 @@
     const initBuildDeck = () => {
       const addCardButton = document.getElementById('addCardBtn');
       const postSaveDeck = (e) => saveDeck(e);
+
+      addCardButton.addEventListener('click', postSaveDeck);
     };
 
     const init = () => {
@@ -226,6 +222,7 @@
           <button id="addCardBtn" type="button" class="btn btn-default">Add Card</button>
         </section>
         <section id="cardList" class="col-6 border-dark">
+          
           <ul id="deckList" class="list-group">
             <li class="list-group-item">Test one</li>
             <li class="list-group-item">Test two</li>
