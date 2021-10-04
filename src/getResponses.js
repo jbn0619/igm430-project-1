@@ -2,7 +2,7 @@ const url = require('url');
 
 const decks = [];
 const search = '';
-const sentDeckName = '';
+let sentDeckName = '';
 
 // Builds a response with a JSON object
 const buildJSON = (request, response, message, id) => {
@@ -30,7 +30,6 @@ const buildResponse = (request, response, responseString, status) => {
 
 // Handles successful requests.
 const getSuccess = (request, response) => {
-  const acceptedTypes = request.headers.accept.split(',');
 
   // Begin building response message
   const message = 'This is a successful response.';
@@ -42,7 +41,6 @@ const getSuccess = (request, response) => {
 
 // Handles bad requests
 const getBadRequest = (request, response) => {
-  const acceptedTypes = request.headers.accept.split(',');
   // Prase out if this is a valid bad request or not.
   const parsedUrl = url.parse(request.url);
   let message;
@@ -65,7 +63,6 @@ const getBadRequest = (request, response) => {
 };
 
 const getUnauthorized = (request, response) => {
-  const acceptedTypes = request.headers.accept.split(',');
   // Prase out if the user is logged in or not.
   const parsedUrl = url.parse(request.url);
 
@@ -89,7 +86,6 @@ const getUnauthorized = (request, response) => {
 };
 
 const getForbidden = (request, response) => {
-  const acceptedTypes = request.headers.accept.split(',');
 
   const message = 'You do not have access to this content.';
   const id = 'forbidden';
@@ -99,7 +95,6 @@ const getForbidden = (request, response) => {
 };
 
 const getInternal = (request, response) => {
-  const acceptedTypes = request.headers.accept.split(',');
 
   const message = 'Internal Server Error. Something went wrong.';
   const id = 'internalError';
@@ -109,8 +104,6 @@ const getInternal = (request, response) => {
 };
 
 const getNotImplemented = (request, response) => {
-  const acceptedTypes = request.headers.accept.split(',');
-
   const message = 'A get request for this page has not been implemented yet. Check again later for updated content.';
   const id = 'notImplemented';
   const responseString = buildJSON(request, response, message, id);
@@ -156,9 +149,9 @@ const getDecks = (request, response, deckName) => {
   }
 };
 
-const getAllDecks = (request, response) => {
-
-};
+//const getAllDecks = (request, response) => {
+//
+//};
 
 // #endregion
 

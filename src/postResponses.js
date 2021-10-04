@@ -65,7 +65,8 @@ const addDeck = (request, response) => {
       };
       response.write(JSON.stringify(responseObj));
       response.end();
-    } else if (bodyParams.deckName && bodyParams.cardName && doesExist === false) { // If both fields are full, create a new user.
+    } else if (bodyParams.deckName && bodyParams.cardName && doesExist === false) { 
+      // If both fields are full, create a new user.
       const jsonDeck = {
         'deckName': bodyParams.deckName,
         'deckList': [
@@ -94,9 +95,9 @@ const addDeck = (request, response) => {
   });
 };
 
-const searchDeck = (request, response) => {
-
-};
+//const searchDeck = (request, response) => {
+//
+//};
 
 const openDeck = (request, response) => {
   const body = [];
@@ -125,9 +126,7 @@ const openDeck = (request, response) => {
     }
 
     // Next, load the deck builder page.
-    response.writeHead(200, { 'Content-Type': 'text/html' });
-  response.write('deckBuilder');
-  response.end();
+    htmlHandler.getDeckBuilder(request, response);
   });
 };
 
