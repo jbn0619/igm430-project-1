@@ -171,7 +171,7 @@ module.exports = {
   getInternal,
   getNotImplemented,
   getDecks,
-  getAllDecks,
+  //getAllDecks,
   getNotFound,
   buildJSON,
   buildResponse,

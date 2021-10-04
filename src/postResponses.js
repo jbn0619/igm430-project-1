@@ -132,6 +132,6 @@ const openDeck = (request, response) => {
 
 module.exports = {
   addDeck,
-  searchDeck,
+  //searchDeck,
   openDeck,
 };
