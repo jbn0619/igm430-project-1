@@ -135,15 +135,16 @@
       return false;
     };
 
+    const openingSearch = (e) =>{
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET','/determineSearch');
+      xhr.setRequestHeader ('Accept', 'application/json');
+      xhr.onload = () => handleResponse(xhr);
+      xhr.send();
+    }
+
     const init = () => {
-      const submitButton = document.querySelector('#submit');
-      const postButton = document.querySelector('#postSubmit');
 
-      const getPage = (e) => sendGet(e);
-      const postPage = (e) => sendPost(e);
-
-      submitButton.addEventListener('click', getPage);
-      postButton.addEventListener('click', postPage);
     };
 
     window.onload = init;

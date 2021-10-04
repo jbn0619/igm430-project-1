@@ -1,2 +1,2 @@
-//const query = require('querystring');
-//const getHandler = require('./getResponses');
+// const query = require('querystring');
+// const getHandler = require('./getResponses');

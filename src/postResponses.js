@@ -33,26 +33,26 @@ const addDeck = (request, response) => {
       if (getHandler.decks[i].deckName === bodyParams.deckName) {
         doesExist = true;
         existingDeckIndex = i;
-      } 
+      }
     }
 
     if (doesExist) { // If the user already exists, update them.
       const deck = getHandler.decks[existingDeckIndex];
-      
+
       // Check if the added card already exists. If not, add it.
       let isNewCard = true;
       for (let j = 0; j < deck.deckList.length; j++) {
         if (deck.deckList[j].cardName === bodyParams.cardName) {
           isNewCard = false;
-          deck.deckList[j].quantity ++;
+          deck.deckList[j].quantity++;
         }
       }
 
       if (isNewCard) {
         const newCard = {
-          'cardName': bodyParams.cardName,
-          'quantity': 1,
-        }
+          cardName: bodyParams.cardName,
+          quantity: 1,
+        };
         deck.deckList.push(newCard);
       }
 
@@ -65,16 +65,16 @@ const addDeck = (request, response) => {
       };
       response.write(JSON.stringify(responseObj));
       response.end();
-    } else if (bodyParams.deckName && bodyParams.cardName && doesExist === false) { 
+    } else if (bodyParams.deckName && bodyParams.cardName && doesExist === false) {
       // If both fields are full, create a new user.
       const jsonDeck = {
-        'deckName': bodyParams.deckName,
-        'deckList': [
+        deckName: bodyParams.deckName,
+        deckList: [
           {
-            'cardName': bodyParams.cardName,
-            'quantity': 1,
+            cardName: bodyParams.cardName,
+            quantity: 1,
           },
-        ]
+        ],
       };
       getHandler.decks.push(jsonDeck);
 
@@ -95,9 +95,9 @@ const addDeck = (request, response) => {
   });
 };
 
-//const searchDeck = (request, response) => {
+// const searchDeck = (request, response) => {
 //
-//};
+// };
 
 const openDeck = (request, response) => {
   const body = [];
@@ -132,6 +132,6 @@ const openDeck = (request, response) => {
 
 module.exports = {
   addDeck,
-  //searchDeck,
+  // searchDeck,
   openDeck,
 };

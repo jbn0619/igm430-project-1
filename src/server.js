@@ -4,7 +4,6 @@ const query = require('querystring');
 const htmlHandler = require('./htmlResponses');
 const getHandler = require('./getResponses');
 const postHandler = require('./postResponses');
-const headHandler = require('./headResponses');
 const deleteHandler = require('./deleteResponses');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
@@ -16,22 +15,12 @@ const urlDictionary = {
     '/search': htmlHandler.getSearch,
     '/deckBuilder': htmlHandler.getDeckBuilder,
     '/style.css': htmlHandler.getCSS,
-    '/success': getHandler.getSuccess,
-    '/badRequest': getHandler.getBadRequest,
-    '/unauthorized': getHandler.getUnauthorized,
-    '/forbidden': getHandler.getForbidden,
-    '/internal': getHandler.getInternal,
-    '/notImplemented': getHandler.getNotImplemented,
     '/getDecks': getHandler.getDecks,
     '/getAllDecks': getHandler.getAllDecks,
     '/getSearchParams': getHandler.getSearchParams,
+    '/determineSearch': htmlHandler.determineSearch,
     '/notReal': getHandler.getNotFound,
     notFound: getHandler.getNotFound,
-  },
-  HEAD: {
-    '/getUsers': headHandler.getUsersHead,
-    '/notReal': headHandler.getNotFoundHead,
-    notFound: headHandler.getNotFoundHead,
   },
   POST: {
     '/addCard': postHandler.addDeck,

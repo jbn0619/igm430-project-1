@@ -155,7 +155,10 @@
       // First, grab the search input's value.
       const searchValue = document.getElementById('searchInput').value;
 
-      xhr.open('POST', '/searchDeck');
+      xhr.open('GET', `/search?deckName=${searchValue}`);
+      xhr.setRequestHeader('Accept', 'application/json');
+      xhr.onload = () => handleResponse(xhr);
+      xhr.send();
     };
 
     const buildDeck = (e) => {
