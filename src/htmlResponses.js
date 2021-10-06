@@ -1,5 +1,6 @@
 const fs = require('fs');
-
+const url = require('url');
+const query = require('querystring');
 const index = fs.readFileSync(`${__dirname}/../client/client.html`);
 const css = fs.readFileSync(`${__dirname}/../client/style.css`);
 const search = fs.readFileSync(`${__dirname}/../client/search.html`);
@@ -36,11 +37,14 @@ const determineSearch = (request, response) => {
   }
 };
 
-const getDeckBuilder = (request, response, deckName) => {
-  if (deckName) {
-    savedOpenDeckName = deckName;
-  }
+const getDeckBuilder = (request, response) => {
+  const parsedUrl = url.parse(request.url);
+  const params = query.parse(parsedUrl);
 
+  if (params.deckName) {
+    savedOpenDeckName = params.deckName;
+  }
+  
   response.writeHead(200, { 'Content-Type': 'text/html' });
   response.write(deckbuild);
   response.end();
@@ -49,6 +53,9 @@ const getDeckBuilder = (request, response, deckName) => {
 const determineOpenDeck = (request, response) => {
   if (savedOpenDeckName !== null) {
     getHandler.getDecks(request, response, savedOpenDeckName);
+  }
+  else {
+    getHandler.getDecks(request, response, '');
   }
 };
 
