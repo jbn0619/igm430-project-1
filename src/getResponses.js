@@ -44,9 +44,10 @@ const getDecks = (request, response, deckName) => {
   }
 };
 
-// const getAllDecks = (request, response) => {
-//
-// };
+const getAllDecks = (request, response) => {
+  console.log(JSON.stringify(decks));
+  buildResponse(request, response, JSON.stringify(decks), 200);
+};
 
 // #endregion
 
@@ -60,7 +61,7 @@ const getNotFound = (request, response) => {
 
 module.exports = {
   getDecks,
-  // getAllDecks,
+  getAllDecks,
   getNotFound,
   buildJSON,
   buildResponse,
