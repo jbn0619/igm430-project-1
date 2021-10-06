@@ -22,5 +22,8 @@
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.24.2"
+  },
+  "dependencies": {
+    "mtgsdk": "^0.4.3"
   }
 }
