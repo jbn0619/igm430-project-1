@@ -37,7 +37,7 @@ const getDecks = (request, response, deckName) => {
     buildResponse(request, response, JSON.stringify(object), 400);
   } else {
     const object = {
-      message: 'No deck with the given name exists.',
+      message: `The deck ${deckName} does not exist.`,
       id: 'noObjectExists',
     };
     buildResponse(request, response, JSON.stringify(object), 400);

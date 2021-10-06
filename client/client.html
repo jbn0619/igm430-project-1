@@ -167,7 +167,7 @@
 
       xhr.open('GET', `/search?deckName=${searchValue}`);
       xhr.setRequestHeader('Accept', 'application/json');
-      xhr.onload = () => handleSearchResponse(xhr);
+      xhr.onload = () => handleSearchResponse(xhr,'/deckBuilder');
       xhr.send();
     };
 
@@ -176,7 +176,7 @@
       xhr.open('GET', '/deckBuilder');
 
       xhr.setRequestHeader('Accept', 'application/json');
-      xhr.onload = () => handleHtmlResponse(xhr);
+      xhr.onload = () => handleOpenDeckResponse(xhr);
 
       xhr.send();
     };
@@ -209,8 +209,8 @@
       openDeckButtons.forEach((item, index) => {
         let deckName = openDeckTitles[index].innerHTML;
         console.log(openDeckTitles[index].innerHTML);
-        let getOpenDeckPage = (name) => openDeck(e, deckName);
-        item.addEventListener('click', getOpenDeckPage.bind(deckName));
+        let getOpenDeckPage = (e) => openDeck(e, deckName);
+        item.addEventListener('click', getOpenDeckPage);
       });
     };
 

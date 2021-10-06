@@ -39,7 +39,7 @@ const determineSearch = (request, response) => {
 
 const getDeckBuilder = (request, response) => {
   const parsedUrl = url.parse(request.url);
-  const params = query.parse(parsedUrl);
+  const params = query.parse(parsedUrl.query);
 
   if (params.deckName) {
     savedOpenDeckName = params.deckName;
@@ -51,11 +51,22 @@ const getDeckBuilder = (request, response) => {
 };
 
 const determineOpenDeck = (request, response) => {
-  if (savedOpenDeckName !== null) {
-    getHandler.getDecks(request, response, savedOpenDeckName);
+  let tempSave = savedOpenDeckName;
+  savedOpenDeckName = '';
+  if (tempSave === '') {
+    tempSave = null;
+  }
+  
+  if (tempSave !== null) {
+    
+    getHandler.getDecks(request, response, tempSave);
   }
   else {
-    getHandler.getDecks(request, response, '');
+    const object = {
+      message: 'No deck was opened.',
+      id: 'noOpen',
+    };
+    getHandler.buildResponse(request, response, JSON.stringify(object), 200);
   }
 };
 
