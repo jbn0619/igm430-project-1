@@ -1,6 +1,7 @@
 const fs = require('fs');
 const url = require('url');
 const query = require('querystring');
+
 const index = fs.readFileSync(`${__dirname}/../client/client.html`);
 const css = fs.readFileSync(`${__dirname}/../client/style.css`);
 const search = fs.readFileSync(`${__dirname}/../client/search.html`);
@@ -44,7 +45,7 @@ const getDeckBuilder = (request, response) => {
   if (params.deckName) {
     savedOpenDeckName = params.deckName;
   }
-  
+
   response.writeHead(200, { 'Content-Type': 'text/html' });
   response.write(deckbuild);
   response.end();

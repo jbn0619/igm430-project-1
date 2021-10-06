@@ -18,7 +18,6 @@ const urlDictionary = {
     '/getDecks': getHandler.getDecks,
     '/getAllDecks': getHandler.getAllDecks,
     '/determineSearch': htmlHandler.determineSearch,
-    '/search': htmlHandler.getSearch,
     '/openDeck': htmlHandler.getDeckBuilder,
     '/checkOpenDeck': htmlHandler.determineOpenDeck,
     '/notReal': getHandler.getNotFound,
