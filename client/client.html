@@ -94,10 +94,20 @@
       }
     };
 
-    const handleHtmlResponse = (xhr) => {
+    const handleOpenDeckResponse = (xhr) => {
+      console.log("Here1");
+      handleHtmlResponse(xhr, '/deckBuilder');
+    };
+
+    const handleSearchResponse = (xhr) => {
+      handleHtmlResponse(xhr, '/search');
+    };
+
+    const handleHtmlResponse = (xhr, newLocation) => {
+      console.log("Here2");
       switch (xhr.status) {
         case 200:
-          window.open(xhr.content);
+          window.location.href = newLocation;
           console.log("Success!");
           break;
         case 404:
@@ -157,7 +167,7 @@
 
       xhr.open('GET', `/search?deckName=${searchValue}`);
       xhr.setRequestHeader('Accept', 'application/json');
-      xhr.onload = () => handleResponse(xhr);
+      xhr.onload = () => handleSearchResponse(xhr);
       xhr.send();
     };
 
@@ -172,13 +182,11 @@
     };
 
     const openDeck = (e, deckName) => {
-      const input=`?deckName=${deckName}`;
-
       const xhr = new XMLHttpRequest();
-      xhr.open('POST',`/openDeck`);
+      xhr.open('GET',`/openDeck?deckName=${deckName}`);
       xhr.setRequestHeader('Accept','application/json');
-      xhr.onload = () => handleHtmlResponse(xhr);
-      xhr.send(input);
+      xhr.onload = () => handleOpenDeckResponse(xhr);
+      xhr.send();
     };
 
     const initNavBar = () => {

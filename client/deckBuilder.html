@@ -190,7 +190,7 @@
 
     const initLoadDeck = () => {
       const xhr = new XMLHttpRequest();
-      xhr.open('GET',`/getDecks`);
+      xhr.open('GET',`/checkOpenDeck`);
       xhr.setRequestHeader('Accept','application/json');
       xhr.onload = () => loadDeckText(xhr);
       xhr.send();

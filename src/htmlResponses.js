@@ -7,6 +7,7 @@ const deckbuild = fs.readFileSync(`${__dirname}/../client/deckBuilder.html`);
 const getHandler = require('./getResponses');
 
 let savedSearchName = '';
+let savedOpenDeckName = '';
 
 const getIndex = (request, response) => {
   response.writeHead(200, { 'Content-Type': 'text/html' });
@@ -30,15 +31,25 @@ const getSearch = (request, response, deckName) => {
 };
 
 const determineSearch = (request, response) => {
-  if (savedSearchName != null) {
+  if (savedSearchName !== null) {
     getHandler.getDecks(request, response, savedSearchName);
   }
 };
 
-const getDeckBuilder = (request, response) => {
+const getDeckBuilder = (request, response, deckName) => {
+  if (deckName) {
+    savedOpenDeckName = deckName;
+  }
+
   response.writeHead(200, { 'Content-Type': 'text/html' });
   response.write(deckbuild);
   response.end();
+};
+
+const determineOpenDeck = (request, response) => {
+  if (savedOpenDeckName !== null) {
+    getHandler.getDecks(request, response, savedOpenDeckName);
+  }
 };
 
 module.exports = {
@@ -47,4 +58,5 @@ module.exports = {
   getSearch,
   getDeckBuilder,
   determineSearch,
+  determineOpenDeck,
 };

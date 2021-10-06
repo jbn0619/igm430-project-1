@@ -17,15 +17,15 @@ const urlDictionary = {
     '/style.css': htmlHandler.getCSS,
     '/getDecks': getHandler.getDecks,
     '/getAllDecks': getHandler.getAllDecks,
-    '/getSearchParams': getHandler.getSearchParams,
     '/determineSearch': htmlHandler.determineSearch,
+    '/search': htmlHandler.getSearch,
+    '/openDeck': htmlHandler.getDeckBuilder,
+    '/checkOpenDeck': htmlHandler.determineOpenDeck,
     '/notReal': getHandler.getNotFound,
     notFound: getHandler.getNotFound,
   },
   POST: {
     '/addCard': postHandler.addDeck,
-    '/searchDeck': postHandler.searchDeck,
-    '/openDeck': postHandler.openDeck,
     notFound: getHandler.getNotFound,
   },
   DELETE: {
