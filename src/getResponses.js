@@ -1,5 +1,9 @@
 const decks = [];
 
+const mtg = require('mtgsdk');
+const url = require('url');
+const query = require('querystring');
+
 // Builds a response with a JSON object
 const buildJSON = (request, response, message, id) => {
   let jsonObj = {
@@ -22,10 +26,47 @@ const buildResponse = (request, response, responseString, status) => {
   response.end();
 };
 
+const getCardName = (request, response) => {
+  let searchList = [];
+  const parsedUrl = url.parse(request.url);
+  const params = query.parse(parsedUrl.query);
+  if (params.cardName) {
+    mtg.card.all({ name: params.cardName, pageSize: 1 })
+      .on('data', (cards) => {;
+        searchList = cards.name;
+      });
+    return buildResponse(request, response, JSON.stringify(searchList), 200);
+  }
+
+  const object = {
+    message: 'No card name was specified. Enter a card name and try again.',
+    id: 'missingParams',
+  };
+  return buildResponse(request, response, JSON.stringify(object), 400);
+};
+
+const getCardText = (request,response) =>{
+  let cardText = [];
+  const parsedUrl = url.parse(request.url);
+  const params = query.parse(parsedUrl.query);
+  if (params.cardName) {
+    mtg.card.all({ name: params.cardName, pageSize: 1 })
+      .on('data', (cards) => {;
+        cardText = cards[0].text;
+      });
+    return buildResponse(request, response, JSON.stringify(cardText), 200);
+  }
+  const object = {
+    message: 'No card name was specified. Enter a card name and try again.',
+    id: 'missingParams',
+  };
+  return buildResponse(request, response, JSON.stringify(object), 400);
+};
+
 const getDecks = (request, response, deckName) => {
   for (let i = 0; i < decks.length; i++) {
     if (decks[i].deckName === deckName) {
-      buildResponse(request, response, JSON.stringify(decks[i]), 200);
+      return buildResponse(request, response, JSON.stringify(decks[i]), 200);
     }
   }
 
@@ -34,19 +75,18 @@ const getDecks = (request, response, deckName) => {
       message: 'No deckname was specified. Enter a deckname and try again.',
       id: 'missingParams',
     };
-    buildResponse(request, response, JSON.stringify(object), 400);
-  } else {
-    const object = {
-      message: `The deck ${deckName} does not exist.`,
-      id: 'noObjectExists',
-    };
-    buildResponse(request, response, JSON.stringify(object), 400);
+    return buildResponse(request, response, JSON.stringify(object), 400);
   }
+  const object = {
+    message: `The deck ${deckName} does not exist.`,
+    id: 'noObjectExists',
+  };
+  return buildResponse(request, response, JSON.stringify(object), 400);
 };
 
 const getAllDecks = (request, response) => {
   console.log(JSON.stringify(decks));
-  buildResponse(request, response, JSON.stringify(decks), 200);
+  return buildResponse(request, response, JSON.stringify(decks), 200);
 };
 
 // #endregion
@@ -56,7 +96,7 @@ const getNotFound = (request, response) => {
   const id = 'notFound';
   const responseString = buildJSON(request, response, message, id);
 
-  buildResponse(request, response, responseString, 404);
+  return buildResponse(request, response, responseString, 404);
 };
 
 module.exports = {
@@ -65,5 +105,6 @@ module.exports = {
   getNotFound,
   buildJSON,
   buildResponse,
+  getCardName,
   decks,
 };

@@ -57,12 +57,10 @@ const determineOpenDeck = (request, response) => {
   if (tempSave === '') {
     tempSave = null;
   }
-  
+
   if (tempSave !== null) {
-    
     getHandler.getDecks(request, response, tempSave);
-  }
-  else {
+  } else {
     const object = {
       message: 'No deck was opened.',
       id: 'noOpen',

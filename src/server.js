@@ -21,6 +21,7 @@ const urlDictionary = {
     '/openDeck': htmlHandler.getDeckBuilder,
     '/checkOpenDeck': htmlHandler.determineOpenDeck,
     '/notReal': getHandler.getNotFound,
+    '/getCardName': getHandler.getCards,
     notFound: getHandler.getNotFound,
   },
   POST: {
@@ -36,7 +37,7 @@ const urlDictionary = {
 // Parses URL and determines what kind of operation the API is handling.
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
-  const params = query.parse(parsedUrl);
+  const params = query.parse(parsedUrl.query);
 
   if (urlDictionary[request.method][parsedUrl.pathname]) {
     urlDictionary[request.method][parsedUrl.pathname](request, response, params[0]);
