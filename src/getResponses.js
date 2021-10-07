@@ -22,6 +22,7 @@ const buildJSON = (request, response, message, id) => {
 // Builds a response with all of the assembled components.
 const buildResponse = (request, response, responseString, status) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
+  console.log(responseString);
   response.write(responseString);
   response.end();
 };
@@ -64,6 +65,7 @@ const getCardText = (request,response) =>{
 };
 
 const getDecks = (request, response, deckName) => {
+  console.log(decks.length);
   for (let i = 0; i < decks.length; i++) {
     if (decks[i].deckName === deckName) {
       return buildResponse(request, response, JSON.stringify(decks[i]), 200);
@@ -76,20 +78,19 @@ const getDecks = (request, response, deckName) => {
       id: 'missingParams',
     };
     return buildResponse(request, response, JSON.stringify(object), 400);
+  } else {
+    const object = {
+      message: `The deck ${deckName} does not exist.`,
+      id: 'noObjectExists',
+    };
+    return buildResponse(request, response, JSON.stringify(object), 400);
   }
-  const object = {
-    message: `The deck ${deckName} does not exist.`,
-    id: 'noObjectExists',
-  };
-  return buildResponse(request, response, JSON.stringify(object), 400);
 };
 
 const getAllDecks = (request, response) => {
   console.log(JSON.stringify(decks));
   return buildResponse(request, response, JSON.stringify(decks), 200);
 };
-
-// #endregion
 
 const getNotFound = (request, response) => {
   const message = 'The page you were looking for was not found.';

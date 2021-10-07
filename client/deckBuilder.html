@@ -144,12 +144,24 @@
       return false;
     };
 
-    const searchDeck = (e) => {
+    const directOpenDeck = (e) => {
+      // First, grab the search input's value.
+      const searchValue = document.getElementById('searchInput').value;
 
+      xhr.open('GET', `/openDeck?deckName=${searchValue}`);
+      xhr.setRequestHeader('Accept', 'application/json');
+      xhr.onload = () => handleOpenDeckResponse(xhr,'/deckBuilder');
+      xhr.send();
     };
 
     const buildDeck = (e) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', '/deckBuilder');
 
+      xhr.setRequestHeader('Accept', 'application/json');
+      xhr.onload = () => handleOpenDeckResponse(xhr);
+
+      xhr.send();
     };
 
     const saveDeck = (e) => {
@@ -200,10 +212,10 @@
       const searchButton = document.getElementById('searchButton');
       const buildDeckButton = document.querySelector('.deckBuildBtn');
 
-      const getSearchPage = (e) => searchDeck(e);
+      const getDirectOpenDeck = (e) => directOpenDeck(e);
       const getBuildPage = (e) => buildDeck(e);
 
-      searchButton.addEventListener('click', getSearchPage);
+      searchButton.addEventListener('click', getDirectOpenDeck);
       buildDeckButton.addEventListener('click', getBuildPage);
     }
 
@@ -234,15 +246,15 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="#">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link deckBuildBtn" href="#">Build Deck</a>
+            <a class="nav-link deckBuildBtn" href="deckBuilder">Build Deck</a>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
-          <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button id="searchButton" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Open Deck" aria-label="Search">
+          <button id="searchButton" class="btn btn-outline-success my-2 my-sm-0" type="submit">Open Deck</button>
         </form>
       </div>
     </nav>
