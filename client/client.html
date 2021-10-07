@@ -82,16 +82,6 @@
       }
     };
 
-    const searchDeck = (e) => {
-      // First, grab the search input's value.
-      const searchValue = document.getElementById('searchInput').value;
-
-      xhr.open('GET', `/search?deckName=${searchValue}`);
-      xhr.setRequestHeader('Accept', 'application/json');
-      xhr.onload = () => handleSearchResponse(xhr,'/deckBuilder');
-      xhr.send();
-    };
-
     const buildDeck = (e) => {
       const xhr = new XMLHttpRequest();
       xhr.open('GET', '/deckBuilder');
@@ -115,10 +105,13 @@
       const searchButton = document.getElementById('searchButton');
       const buildDeckButton = document.querySelector('.deckBuildBtn');
 
-      const getSearchPage = (e) => searchDeck(e);
+      const getDirectOpenDeck = (e) => {
+        const searchValue = document.getElementById('searchInput').value;
+        openDeck(searchValue);
+      };
       const getBuildPage = (e) => buildDeck(e);
 
-      searchButton.addEventListener('click', getSearchPage);
+      searchButton.addEventListener('click', getDirectOpenDeck);
       buildDeckButton.addEventListener('click', getBuildPage);
     }
 
@@ -185,8 +178,8 @@
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
-        <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button id="searchButton" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Open Deck" aria-label="Search">
+        <button id="searchButton" class="btn btn-outline-success my-2 my-sm-0" type="submit">Open Deck</button>
       </form>
     </div>
   </nav>

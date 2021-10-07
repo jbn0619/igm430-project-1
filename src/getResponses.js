@@ -18,14 +18,17 @@ const buildJSON = (request, response, message, id) => {
 // Builds a response with all of the assembled components.
 const buildResponse = (request, response, responseString, status) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
+  console.log(responseString);
   response.write(responseString);
   response.end();
 };
 
 const getDecks = (request, response, deckName) => {
+  console.log(decks.length);
   for (let i = 0; i < decks.length; i++) {
     if (decks[i].deckName === deckName) {
-      buildResponse(request, response, JSON.stringify(decks[i]), 200);
+      console.log(decks[i].deckName);
+      return buildResponse(request, response, JSON.stringify(decks[i]), 200);
     }
   }
 
@@ -34,22 +37,20 @@ const getDecks = (request, response, deckName) => {
       message: 'No deckname was specified. Enter a deckname and try again.',
       id: 'missingParams',
     };
-    buildResponse(request, response, JSON.stringify(object), 400);
+    return buildResponse(request, response, JSON.stringify(object), 400);
   } else {
     const object = {
       message: `The deck ${deckName} does not exist.`,
       id: 'noObjectExists',
     };
-    buildResponse(request, response, JSON.stringify(object), 400);
+    return buildResponse(request, response, JSON.stringify(object), 400);
   }
 };
 
 const getAllDecks = (request, response) => {
   console.log(JSON.stringify(decks));
-  buildResponse(request, response, JSON.stringify(decks), 200);
+  return buildResponse(request, response, JSON.stringify(decks), 200);
 };
-
-// #endregion
 
 const getNotFound = (request, response) => {
   const message = 'The page you were looking for was not found.';

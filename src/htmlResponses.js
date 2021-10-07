@@ -4,7 +4,6 @@ const query = require('querystring');
 
 const index = fs.readFileSync(`${__dirname}/../client/client.html`);
 const css = fs.readFileSync(`${__dirname}/../client/style.css`);
-const search = fs.readFileSync(`${__dirname}/../client/search.html`);
 const deckbuild = fs.readFileSync(`${__dirname}/../client/deckBuilder.html`);
 const getHandler = require('./getResponses');
 
@@ -59,7 +58,6 @@ const determineOpenDeck = (request, response) => {
   }
   
   if (tempSave !== null) {
-    
     getHandler.getDecks(request, response, tempSave);
   }
   else {
