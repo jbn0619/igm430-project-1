@@ -33,7 +33,7 @@ const getCardName = (request, response) => {
   const params = query.parse(parsedUrl.query);
   if (params.cardName) {
     mtg.card.all({ name: params.cardName, pageSize: 1 })
-      .on('data', (cards) => {;
+      .on('data', (cards) => {
         searchList = cards.name;
       });
     return buildResponse(request, response, JSON.stringify(searchList), 200);
@@ -46,13 +46,13 @@ const getCardName = (request, response) => {
   return buildResponse(request, response, JSON.stringify(object), 400);
 };
 
-const getCardText = (request,response) =>{
+const getCardText = (request, response) => {
   let cardText = [];
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
   if (params.cardName) {
     mtg.card.all({ name: params.cardName, pageSize: 1 })
-      .on('data', (cards) => {;
+      .on('data', (cards) => {
         cardText = cards[0].text;
       });
     return buildResponse(request, response, JSON.stringify(cardText), 200);
@@ -78,13 +78,12 @@ const getDecks = (request, response, deckName) => {
       id: 'missingParams',
     };
     return buildResponse(request, response, JSON.stringify(object), 400);
-  } else {
-    const object = {
-      message: `The deck ${deckName} does not exist.`,
-      id: 'noObjectExists',
-    };
-    return buildResponse(request, response, JSON.stringify(object), 400);
   }
+  const object = {
+    message: `The deck ${deckName} does not exist.`,
+    id: 'noObjectExists',
+  };
+  return buildResponse(request, response, JSON.stringify(object), 400);
 };
 
 const getAllDecks = (request, response) => {
