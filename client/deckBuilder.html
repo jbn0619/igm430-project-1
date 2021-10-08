@@ -73,30 +73,29 @@
     };
 
     const loadDeckText = (xhr) =>{
-      const content = document.querySelector('#deckList');
+      const deckListContainer = document.querySelector('#deckList');
       const h2 = document.createElement('h2');
-      const ul = document.createElement('ul');
-      content.innerHTML="";
+      deckListContainer.innerHTML="";
 
       switch(xhr.status){
         case 200:
           if(xhr.response){
             const obj = JSON.parse(xhr.response);
+            const deckList = obj.deckList;
             h2.innerHTML=obj.deckName;
-            content.appendChild(h2);
-            for(const card in obj.decklist){
-              const li = document.createElement('li');
-              li.innerHTML=card.cardName+" #: "+card.quantity;
-              ul.appendChild(li);
+            deckListContainer.appendChild(h2);
+            for (let i = 0; i < deckList.length; i++) {
+              const newCard = `<li class="list-group-item">${deckList[i].cardName} #: ${deckList[i].quantity}</li>`;
+              console.log(newCard);
+              deckListContainer.innerHTML += newCard;
             }
-            content.appendChild(ul);
           }
           break;
         case 400:
           if(xhr.response){
             const obj=JSON.parse(xhr.response);
             h2.innerHTML=obj.message;
-            content.appendChild(h2);
+            deckListContainer.appendChild(h2);
           }
           break;
       }
@@ -269,10 +268,7 @@
         <section id="cardList" class="col-6 border-dark">
           
           <ul id="deckList" class="list-group">
-            <li class="list-group-item">Test one</li>
-            <li class="list-group-item">Test two</li>
-            <li class="list-group-item">Test three</li>
-        </ul>
+          </ul>
         </section>
       </div>      
     </section>
