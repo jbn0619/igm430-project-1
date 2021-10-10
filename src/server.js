@@ -29,6 +29,7 @@ const urlDictionary = {
   },
   DELETE: {
     '/clearDeck': deleteHandler.deleteDeck,
+    '/deleteCard': deleteHandler.deleteCard,
     notFound: getHandler.getNotFound,
   },
 };

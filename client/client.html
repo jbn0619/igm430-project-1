@@ -58,16 +58,10 @@
     };
 
     const handleOpenDeckResponse = (xhr) => {
-      console.log("Here1");
       handleHtmlResponse(xhr, '/deckBuilder');
     };
 
-    const handleSearchResponse = (xhr) => {
-      handleHtmlResponse(xhr, '/search');
-    };
-
     const handleHtmlResponse = (xhr, newLocation) => {
-      console.log("Here2");
       switch (xhr.status) {
         case 200:
           window.location.href = newLocation;

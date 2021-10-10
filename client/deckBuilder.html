@@ -52,16 +52,18 @@
         case 200:
           if(xhr.response){
             const obj = JSON.parse(xhr.response);
-            const deckList = obj.deckList;
-            h2.innerHTML=obj.deckName;
-            deckListContainer.appendChild(h2);
-            for (let i = 0; i < deckList.length; i++) {
-              const newCard = `<li class="list-group-item">${deckList[i].cardName} #: ${deckList[i].quantity}</li>`;
-              console.log(newCard);
-              deckListContainer.innerHTML += newCard;
+            if (obj.deckList) {
+              const deckList = obj.deckList;
+              h2.innerHTML=obj.deckName;
+              deckListContainer.appendChild(h2);
+              for (let i = 0; i < deckList.length; i++) {
+                const newCard = `<li class="list-group-item">${deckList[i].cardName} #: ${deckList[i].quantity}</li>`;
+                console.log(newCard);
+                deckListContainer.innerHTML += newCard;
+              }
             }
-          }
-          addCardClickEvent();
+            addCardClickEvent();
+            }
           break;
         case 400:
           if(xhr.response){
@@ -69,6 +71,26 @@
             h2.innerHTML=obj.message;
             deckListContainer.appendChild(h2);
           }
+          break;
+      }
+    };
+
+    const handleHomePageResponse = (xhr) => {
+      handleHtmlResponse(xhr, '/');
+    };
+
+    const handleHtmlResponse = (xhr, newLocation) => {
+      console.log("Here2");
+      switch (xhr.status) {
+        case 200:
+          window.location.href = newLocation;
+          console.log("Success!");
+          break;
+        case 404:
+          console.log("Error: Page not found.");
+          break;
+        default:
+          console.log("Error: Page not found.");
           break;
       }
     };
@@ -89,6 +111,16 @@
 
       xhr.setRequestHeader('Accept', 'application/json');
       xhr.onload = () => handleOpenDeckResponse(xhr);
+
+      xhr.send();
+    };
+
+    const homePage = (e) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', '/');
+
+      xhr.setRequestHeader('Accept', 'applications/json');
+      xhr.onload = () => handleHomePageResponse(xhr);
 
       xhr.send();
     };
@@ -144,7 +176,9 @@
 
       const getDirectOpenDeck = (e) => directOpenDeck(e);
       const getBuildPage = (e) => buildDeck(e);
+      const getHomePage = (e) => homePage(e);
 
+      homeButton.addEventListener('click', getHomePage);
       searchButton.addEventListener('click', getDirectOpenDeck);
       buildDeckButton.addEventListener('click', getBuildPage);
     }
