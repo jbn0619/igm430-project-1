@@ -13,42 +13,6 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
-    // Parse through any JSON coming from the server.
-    const parseJSON = (xhr, content) => {
-      const obj = JSON.parse(xhr.response);
-      console.dir(obj);
-
-      if (obj.message) {
-        const p = document.createElement('p');
-        p.textContent = `Message: ${obj.message}`;
-        content.appendChild(p);
-      }
-
-      if (obj.id) {
-        const p = document.createElement('p');
-        p.textContent = `ID: ${obj.id}`;
-        content.appendChild(p);
-      }
-    };
-
-    // Parse through a user object if getUsers is called.
-    const parseUsers = (xhr, content) => {
-      const obj = JSON.parse(xhr.response);
-      console.dir(obj);
-
-      for (const u in obj) {
-        let user = obj[u];
-        console.log(user);
-        const p1 = document.createElement('p');
-        p1.textContent = `Name: ${user.name}`;
-        content.appendChild(p1);
-
-        const p2 = document.createElement('p');
-        p2.textContent = `Age: ${user.age}`;
-        content.appendChild(p2);
-      }
-    };
-
     const handleResponse = (xhr) => {
       const responseType = xhr.getResponseHeader('Content-Type');
 
@@ -72,76 +36,41 @@
       }
     };
 
+    const addCardClickEvent = () => {
+      const cards = document.querySelectorAll('.list-group-item');
+      for (let i = 0; i < cards.length; i++) {
+
+      }
+    };
+
     const loadDeckText = (xhr) =>{
-      const content = document.querySelector('#deckList');
+      const deckListContainer = document.querySelector('#deckList');
       const h2 = document.createElement('h2');
-      const ul = document.createElement('ul');
-      content.innerHTML="";
+      deckListContainer.innerHTML="";
 
       switch(xhr.status){
         case 200:
           if(xhr.response){
             const obj = JSON.parse(xhr.response);
+            const deckList = obj.deckList;
             h2.innerHTML=obj.deckName;
-            content.appendChild(h2);
-            for(const card in obj.decklist){
-              const li = document.createElement('li');
-              li.innerHTML=card.cardName+" #: "+card.quantity;
-              ul.appendChild(li);
+            deckListContainer.appendChild(h2);
+            for (let i = 0; i < deckList.length; i++) {
+              const newCard = `<li class="list-group-item">${deckList[i].cardName} #: ${deckList[i].quantity}</li>`;
+              console.log(newCard);
+              deckListContainer.innerHTML += newCard;
             }
-            content.appendChild(ul);
           }
+          addCardClickEvent();
           break;
         case 400:
           if(xhr.response){
             const obj=JSON.parse(xhr.response);
             h2.innerHTML=obj.message;
-            content.appendChild(h2);
+            deckListContainer.appendChild(h2);
           }
           break;
       }
-    };
-
-    // Send GET/HEAD information to the server.
-    const sendGet = (e) => {
-      e.preventDefault();
-
-      const urlField = document.querySelector('#urlField');
-      const methodField = document.querySelector('#methodSelect');
-
-      const xhr = new XMLHttpRequest();
-      xhr.open(methodField.value, urlField.value);
-
-      xhr.setRequestHeader('Accept', 'application/json');
-
-      xhr.onload = () => handleResponse(xhr);
-      
-      xhr.send();
-    };
-
-    // Send the user's data to the server with a POST request.
-    const sendPost = (e) => {
-      e.preventDefault();
-
-      const nameInput = nameForm.querySelector('#nameField');
-      const ageInput = nameForm.querySelector('#ageField');
-      const urlField = document.querySelector('#urlField');
-      const methodField = document.querySelector('#methodSelect');
-      
-      const xhr = new XMLHttpRequest();
-
-      xhr.open('POST', '/addUser');
-
-      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      xhr.setRequestHeader ('Accept', 'application/json');
-
-      xhr.onload = () => handleResponse(xhr);
-
-      const newUser = `name=${nameInput.value}&age=${ageInput.value}`;
-      
-      xhr.send(newUser);
-    
-      return false;
     };
 
     const directOpenDeck = (e) => {
@@ -211,6 +140,7 @@
     const initNavBar = () => {
       const searchButton = document.getElementById('searchButton');
       const buildDeckButton = document.querySelector('.deckBuildBtn');
+      const homeButton = document.querySelector('#homeBtn');
 
       const getDirectOpenDeck = (e) => directOpenDeck(e);
       const getBuildPage = (e) => buildDeck(e);
@@ -246,7 +176,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home</a>
+            <a id="homeBtn" class="nav-link" href="#">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link deckBuildBtn" href="deckBuilder">Build Deck</a>
@@ -269,10 +199,7 @@
         <section id="cardList" class="col-6 border-dark">
           
           <ul id="deckList" class="list-group">
-            <li class="list-group-item">Test one</li>
-            <li class="list-group-item">Test two</li>
-            <li class="list-group-item">Test three</li>
-        </ul>
+          </ul>
         </section>
       </div>      
     </section>
