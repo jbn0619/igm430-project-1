@@ -26,7 +26,6 @@ const addDeck = (request, response) => {
     const bodyString = Buffer.concat(body).toString();
     const bodyParams = query.parse(bodyString);
     console.dir(getHandler.decks);
-    let doesExist = false;
     let existingDeckIndex = -1;
 
     mtg.card.where({ name: bodyParams.cardName, pageSize: 1 })
@@ -37,43 +36,39 @@ const addDeck = (request, response) => {
         console.log(cardText);
         // Check if the deck already exists in our database.
         for (let i = 0; i < getHandler.decks.length; i++) {
-          if (getHandler.decks[i].deckName === cardName) {
-            doesExist = true;
+          if (getHandler.decks[i].deckName === bodyParams.deckName) {
             existingDeckIndex = i;
           }
         }
 
-        if (doesExist) { // If the user already exists, update them.
+        if (existingDeckIndex >= 0) { // If the user already exists, update them.
           const deck = getHandler.decks[existingDeckIndex];
 
           // Check if the added card already exists. If not, add it.
-          let isNewCard = true;
+          let existingCardIndex = -1;
           for (let j = 0; j < deck.deckList.length; j++) {
             if (deck.deckList[j].cardName === cardName) {
-              isNewCard = false;
-              deck.deckList[j].quantity++;
+              existingCardIndex = j;
             }
           }
 
-          if (isNewCard) {
+          if (existingCardIndex >= 0) {
+            getHandler.decks[existingDeckIndex].deckList[j].quantity++;
+          }
+          else {
             const newCard = {
-              cardName,
+              cardName: bodyParams.cardName,
               cardText,
               quantity: 1,
             };
-            deck.deckList.push(newCard);
+            getHandler.decks[existingDeckIndex].deckList.push(newCard);
           }
 
-          getHandler.decks[existingDeckIndex] = deck;
-
-          console.dir(deck);
           response.writeHead(204, { 'Content-Type': 'application/json' });
-          const responseObj = {
-            message: 'Updated!',
-          };
-          response.write(JSON.stringify(responseObj));
+          let jsonString = JSON.stringify(getHandler.decks[existingDeckIndex]);
+          response.write(jsonString);
           response.end();
-        } else if (bodyParams.deckName && bodyParams.cardName && doesExist === false) {
+        } else if (bodyParams.deckName && bodyParams.cardName && existingDeckIndex === -1) {
           // If both fields are full, create a new user.
           const jsonDeck = {
             deckName: bodyParams.deckName,
@@ -86,12 +81,10 @@ const addDeck = (request, response) => {
             ],
           };
           getHandler.decks.push(jsonDeck);
+          console.dir(JSON.stringify(jsonDeck));
 
           response.writeHead(201, { 'Content-Type': 'application/json' });
-          const responseObj = {
-            message: 'Success!',
-          };
-          response.write(JSON.stringify(responseObj));
+          response.write(JSON.stringify(jsonDeck));
           response.end();
         } else { // If either fields are missing, return a 400 error.
           response.writeHead(400, { 'Content-Type': 'application/json' });

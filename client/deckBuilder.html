@@ -36,10 +36,22 @@
       }
     };
 
-    const addCardClickEvent = () => {
-      const cards = document.querySelectorAll('.list-group-item');
-      for (let i = 0; i < cards.length; i++) {
+    const deleteCard = (e, cardName) => {
+      const deckName = document.getElementById('deckNameInput').value;
 
+      const xhr = new XMLHttpRequest();
+      xhr.open('DELETE', `/deleteCard?deckName=${deckName}&cardName=${cardName}`);
+      xhr.setRequestHeader('Accept', 'application/json');
+      xhr.onload = () => loadDeckText(xhr,'/deckBuilder');
+      xhr.send();
+    };
+
+    const addCardClickEvent = () => {
+      const cards = document.querySelectorAll('.deleteCardBtn');
+      for (let i = 0; i < cards.length; i++) {
+        let cardName = cards[i].innerHTML;
+        let getDeleteCard = (e) => deleteCard(e, cardName);
+        cards[i].addEventListener('click', getDeleteCard);
       }
     };
 
@@ -47,17 +59,26 @@
       const deckListContainer = document.querySelector('#deckList');
       const h2 = document.createElement('h2');
       deckListContainer.innerHTML="";
+      console.log("LoadDeckText");
+      console.log(xhr.status);
+      console.log(xhr.response);
 
       switch(xhr.status){
+        case 201:
+        case 204:
         case 200:
-          if(xhr.response){
+          if(xhr.response !== null || xhr.response !== undefined){
             const obj = JSON.parse(xhr.response);
             if (obj.deckList) {
+              console.log(obj.deckList);
               const deckList = obj.deckList;
               h2.innerHTML=obj.deckName;
               deckListContainer.appendChild(h2);
               for (let i = 0; i < deckList.length; i++) {
-                const newCard = `<li class="list-group-item">${deckList[i].cardName} #: ${deckList[i].quantity}</li>`;
+                const newCard = `
+                  <li class="list-group-item">
+                  <button class="deleteCardBtn btn btn-outline-success my-2 my-sm-0">${deckList[i].cardName} #: ${deckList[i].quantity}</button>
+                  </li>`;
                 console.log(newCard);
                 deckListContainer.innerHTML += newCard;
               }
@@ -75,12 +96,19 @@
       }
     };
 
+    const handleDeleteResponse = (xhr) => {
+
+    };
+
     const handleHomePageResponse = (xhr) => {
       handleHtmlResponse(xhr, '/');
     };
 
+    const handleOpenDeckResponse = (xhr) => {
+      handleHtmlResponse(xhr, '/deckBuilder');
+    };
+
     const handleHtmlResponse = (xhr, newLocation) => {
-      console.log("Here2");
       switch (xhr.status) {
         case 200:
           window.location.href = newLocation;
@@ -99,6 +127,7 @@
       // First, grab the search input's value.
       const searchValue = document.getElementById('searchInput').value;
 
+      const xhr = new XMLHttpRequest();
       xhr.open('GET', `/openDeck?deckName=${searchValue}`);
       xhr.setRequestHeader('Accept', 'application/json');
       xhr.onload = () => handleOpenDeckResponse(xhr,'/deckBuilder');
@@ -132,10 +161,20 @@
       // Display the new card name in the deck list
       const deckList = document.querySelectorAll('#deckList');
       const newListItem = document.createElement('li');
-      newListItem.innerHTML = `${cardName}`;
-      newListItem.classList.add('list-group-item');
-      document.getElementById('deckList').appendChild(newListItem);
 
+      newListItem.classList.add('list-group-item');
+      const deleteCardBtn = document.createElement('button');
+      deleteCardBtn.classList.add('deleteCardBtn');
+      deleteCardBtn.classList.add('btn');
+      deleteCardBtn.classList.add('my-2');
+      deleteCardBtn.classList.add('my-2');
+      deleteCardBtn.classList.add('my-sm-0');
+      deleteCardBtn.innerHTML = `${cardName}`;
+      let getDeleteCard = (e) => deleteCard(e, cardName);
+      deleteCardBtn.addEventListener('click', getDeleteCard);
+      newListItem.appendChild(deleteCardBtn);
+      document.getElementById('deckList').appendChild(newListItem);
+      
       const xhr = new XMLHttpRequest();
 
       xhr.open('POST', '/addCard');
@@ -143,7 +182,7 @@
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.setRequestHeader ('Accept', 'application/json');
 
-      xhr.onload = () => handleResponse(xhr);
+      xhr.onload = () => loadDeckText(xhr);
 
       const newCard = `deckName=${deckName}&cardName=${cardName}`;
       
@@ -197,8 +236,6 @@
 
       // Check if there are any decks already opened. If so, load it.
       initLoadDeck();
-      
-      //saveDeckButton.addEventListener('click', postSaveDeck);
     };
 
     window.onload = init;
@@ -231,7 +268,6 @@
           <button id="addCardBtn" type="button" class="btn btn-default">Add Card</button>
         </section>
         <section id="cardList" class="col-6 border-dark">
-          
           <ul id="deckList" class="list-group">
           </ul>
         </section>

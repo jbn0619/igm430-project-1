@@ -14,47 +14,11 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
-    // Parse through any JSON coming from the server.
-    const parseJSON = (xhr, content) => {
-      const obj = JSON.parse(xhr.response);
-      console.dir(obj);
-
-      if (obj.message) {
-        const p = document.createElement('p');
-        p.textContent = `Message: ${obj.message}`;
-        content.appendChild(p);
-      }
-
-      if (obj.id) {
-        const p = document.createElement('p');
-        p.textContent = `ID: ${obj.id}`;
-        content.appendChild(p);
-      }
-    };
-
     // Parse the decks out of any xhr content.
     const parseDeck = (xhr, content) => {
       const payload = JSON.parse(xhr.response);
 
       console.log(payload);
-    };
-
-    // Parse through a user object if getUsers is called.
-    const parseUsers = (xhr, content) => {
-      const obj = JSON.parse(xhr.response);
-      console.dir(obj);
-
-      for (const u in obj) {
-        let user = obj[u];
-        console.log(user);
-        const p1 = document.createElement('p');
-        p1.textContent = `Name: ${user.name}`;
-        content.appendChild(p1);
-
-        const p2 = document.createElement('p');
-        p2.textContent = `Age: ${user.age}`;
-        content.appendChild(p2);
-      }
     };
 
     const handleOpenDeckResponse = (xhr) => {
@@ -137,7 +101,6 @@
       const openDeckTitles = document.querySelectorAll('.openDeckTitle');
       openDeckButtons.forEach((item, index) => {
         let deckName = openDeckTitles[index].innerHTML;
-        console.log(openDeckTitles[index].innerHTML);
         let getOpenDeckPage = (e) => openDeck(e, deckName);
         item.addEventListener('click', getOpenDeckPage);
       });
