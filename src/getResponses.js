@@ -22,7 +22,6 @@ const buildJSON = (request, response, message, id) => {
 // Builds a response with all of the assembled components.
 const buildResponse = (request, response, responseString, status) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
-  console.log(responseString);
   response.write(responseString);
   response.end();
 };
@@ -46,26 +45,7 @@ const getCardName = (request, response) => {
   return buildResponse(request, response, JSON.stringify(object), 400);
 };
 
-const getCardText = (request, response) => {
-  let cardText = [];
-  const parsedUrl = url.parse(request.url);
-  const params = query.parse(parsedUrl.query);
-  if (params.cardName) {
-    mtg.card.all({ name: params.cardName, pageSize: 1 })
-      .on('data', (cards) => {
-        cardText = cards[0].text;
-      });
-    return buildResponse(request, response, JSON.stringify(cardText), 200);
-  }
-  const object = {
-    message: 'No card name was specified. Enter a card name and try again.',
-    id: 'missingParams',
-  };
-  return buildResponse(request, response, JSON.stringify(object), 400);
-};
-
 const getDecks = (request, response, deckName) => {
-  console.log(decks.length);
   for (let i = 0; i < decks.length; i++) {
     if (decks[i].deckName === deckName) {
       return buildResponse(request, response, JSON.stringify(decks[i]), 200);
@@ -87,8 +67,7 @@ const getDecks = (request, response, deckName) => {
 };
 
 const getAllDecks = (request, response) => {
-  console.log(JSON.stringify(decks));
-  return buildResponse(request, response, JSON.stringify(decks), 200);
+  buildResponse(request, response, JSON.stringify(decks), 200);
 };
 
 const getNotFound = (request, response) => {

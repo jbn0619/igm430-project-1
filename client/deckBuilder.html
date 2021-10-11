@@ -38,7 +38,6 @@
 
     const deleteCard = (e, cardName) => {
       const deckName = document.getElementById('deckNameInput').value;
-
       const xhr = new XMLHttpRequest();
       xhr.open('DELETE', `/deleteCard?deckName=${deckName}&cardName=${cardName}`);
       xhr.setRequestHeader('Accept', 'application/json');
@@ -59,18 +58,12 @@
       const deckListContainer = document.querySelector('#deckList');
       const h2 = document.createElement('h2');
       deckListContainer.innerHTML="";
-      console.log("LoadDeckText");
-      console.log(xhr.status);
-      console.log(xhr.response);
 
       switch(xhr.status){
         case 201:
-        case 204:
-        case 200:
-          if(xhr.response !== null || xhr.response !== undefined){
+        if(xhr.response !== null || xhr.response !== undefined){
             const obj = JSON.parse(xhr.response);
             if (obj.deckList) {
-              console.log(obj.deckList);
               const deckList = obj.deckList;
               h2.innerHTML=obj.deckName;
               deckListContainer.appendChild(h2);
@@ -78,8 +71,27 @@
                 const newCard = `
                   <li class="list-group-item">
                   <button class="deleteCardBtn btn btn-outline-success my-2 my-sm-0">${deckList[i].cardName} #: ${deckList[i].quantity}</button>
+                  <p>${deckList[i].cardText}<p>
                   </li>`;
-                console.log(newCard);
+                deckListContainer.innerHTML += newCard;
+              }
+            }
+            addCardClickEvent();
+            }
+          break;
+        case 200:
+          if(xhr.response !== null || xhr.response !== undefined){
+            const obj = JSON.parse(xhr.response);
+            if (obj.deckList) {
+              const deckList = obj.deckList;
+              h2.innerHTML=obj.deckName;
+              deckListContainer.appendChild(h2);
+              for (let i = 0; i < deckList.length; i++) {
+                const newCard = `
+                  <li class="list-group-item">
+                  <button class="deleteCardBtn btn btn-outline-success my-2 my-sm-0">${deckList[i].cardName} #: ${deckList[i].quantity}</button>
+                  <p>${deckList[i].cardText}<p>
+                  </li>`;
                 deckListContainer.innerHTML += newCard;
               }
             }

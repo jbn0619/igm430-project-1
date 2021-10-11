@@ -25,15 +25,12 @@ const addDeck = (request, response) => {
     // Piece together the new user.
     const bodyString = Buffer.concat(body).toString();
     const bodyParams = query.parse(bodyString);
-    console.dir(getHandler.decks);
     let existingDeckIndex = -1;
 
     mtg.card.where({ name: bodyParams.cardName, pageSize: 1 })
       .then((cards) => {
         const cardName = cards[0].name;
         const cardText = cards[0].text;
-        console.log(cardName);
-        console.log(cardText);
         // Check if the deck already exists in our database.
         for (let i = 0; i < getHandler.decks.length; i++) {
           if (getHandler.decks[i].deckName === bodyParams.deckName) {
@@ -43,30 +40,24 @@ const addDeck = (request, response) => {
 
         if (existingDeckIndex >= 0) { // If the user already exists, update them.
           const deck = getHandler.decks[existingDeckIndex];
-
+          let inDeck = false;
           // Check if the added card already exists. If not, add it.
-          let existingCardIndex = -1;
           for (let j = 0; j < deck.deckList.length; j++) {
-            if (deck.deckList[j].cardName === cardName) {
-              existingCardIndex = j;
+            if (deck.deckList[j].cardName === cardName && inDeck === false) {
+              getHandler.decks[existingDeckIndex].deckList[j].quantity++;
+              inDeck = true;
+            } else if (inDeck === false) {
+              const newCard = {
+                cardName,
+                cardText,
+                quantity: 1,
+              };
+              getHandler.decks[existingDeckIndex].deckList.push(newCard);
             }
           }
-
-          if (existingCardIndex >= 0) {
-            getHandler.decks[existingDeckIndex].deckList[j].quantity++;
-          }
-          else {
-            const newCard = {
-              cardName: bodyParams.cardName,
-              cardText,
-              quantity: 1,
-            };
-            getHandler.decks[existingDeckIndex].deckList.push(newCard);
-          }
-
-          response.writeHead(204, { 'Content-Type': 'application/json' });
-          let jsonString = JSON.stringify(getHandler.decks[existingDeckIndex]);
-          response.write(jsonString);
+          response.writeHead(201, { 'Content-Type': 'application/json' });
+          const jsonDeck = getHandler.decks[existingDeckIndex];
+          response.write(JSON.stringify(jsonDeck));
           response.end();
         } else if (bodyParams.deckName && bodyParams.cardName && existingDeckIndex === -1) {
           // If both fields are full, create a new user.
@@ -135,6 +126,5 @@ const openDeck = (request, response) => {
 
 module.exports = {
   addDeck,
-  // searchDeck,
   openDeck,
 };
