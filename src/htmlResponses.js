@@ -7,7 +7,7 @@ const css = fs.readFileSync(`${__dirname}/../client/style.css`);
 const deckbuild = fs.readFileSync(`${__dirname}/../client/deckBuilder.html`);
 const getHandler = require('./getResponses');
 
-let savedSearchName = '';
+const savedSearchName = '';
 let savedOpenDeckName = '';
 
 const getIndex = (request, response) => {
@@ -19,15 +19,6 @@ const getIndex = (request, response) => {
 const getCSS = (request, response) => {
   response.writeHead(200, { 'Content-Type': 'text/css' });
   response.write(css);
-  response.end();
-};
-
-const getSearch = (request, response, deckName) => {
-  if (deckName) {
-    savedSearchName = deckName;
-  }
-  response.writeHead(200, { 'Content-Type': 'text/html' });
-  response.write(search);
   response.end();
 };
 
@@ -71,7 +62,6 @@ const determineOpenDeck = (request, response) => {
 module.exports = {
   getIndex,
   getCSS,
-  getSearch,
   getDeckBuilder,
   determineSearch,
   determineOpenDeck,

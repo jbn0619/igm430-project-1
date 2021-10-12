@@ -5,6 +5,7 @@ const htmlHandler = require('./htmlResponses');
 const getHandler = require('./getResponses');
 const postHandler = require('./postResponses');
 const deleteHandler = require('./deleteResponses');
+const headHandler = require('./headResponses');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
@@ -20,8 +21,12 @@ const urlDictionary = {
     '/openDeck': htmlHandler.getDeckBuilder,
     '/checkOpenDeck': htmlHandler.determineOpenDeck,
     '/notReal': getHandler.getNotFound,
-    '/getCardName': getHandler.getCards,
     notFound: getHandler.getNotFound,
+  },
+  HEAD: {
+    '/getDecks': headHandler.getDecksMeta,
+    '/getAllDecks': headHandler.getAllDecksMeta,
+    notFound: headHandler.getNotFoundMeta,
   },
   POST: {
     '/addCard': postHandler.addDeck,
