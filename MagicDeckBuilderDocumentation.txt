@@ -1,0 +1,27 @@
+Diony Severino and Justin Neft - IGME 430 Project 1 Documentation - Magic the Gathering Deckbuilder API
+
+1) What your site does and its purpose.
+Our site is a Magic the Gathering deckbuilding api. It utilizes the MtG API in order to retrieve data
+for various cards from the game, and allows users to name and create their own decks for the game, along with allowing
+users to view other and edit other decks that have been created using our API.
+
+2) What part of your app does the API handle?
+Our API handles the deckbuilding aspect of the application. When the user clicks Build Deck, or opens an already created
+deck, they will be able to add cards to that deck, or make an entirely new deck by filling in a new deck name in the
+Deck Name field. The API handles each deck individually, and retrieves card information from the MtG API so the user
+can see what card they added to their deck. They may also delete cards that exist in a deck by clicking on them.
+
+3) What went right and what went wrong?
+We found that utilizing the external API was a difficult prospect at first, and it caused many errors that due to
+some poor communication took awhile to finish. That being said, once those issues were resolved, it was a fairly smooth
+project from then on, being able to implement most of our desired features relatively quickly.
+
+4) If you were to continue, what would you do to improve your app?
+We would improve the options available for viewing decks, like allowing viewers to see what each card in their deck
+actually looks like, along with adding support for deckbuilding for Magic's other formats, like Commander or Brawl.
+
+5) How did you go above and beyond?
+Our project went above and beyond by utilizing the Magic the Gathering Deckbuilder API to retrieve accurate card 
+information, along with implementing DELETE requests in order to remove information from the server.
+
+Link to the Magic the Gathering API used: https://docs.magicthegathering.io/
