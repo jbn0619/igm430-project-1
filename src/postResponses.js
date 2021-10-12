@@ -2,6 +2,7 @@ const query = require('querystring');
 const mtg = require('mtgsdk');
 const getHandler = require('./getResponses');
 const htmlHandler = require('./htmlResponses');
+const { card } = require('mtgsdk');
 
 const addDeck = (request, response) => {
   // THIS SECTION OF THE CODE WAS TAKEN AND ADAPTED FROM AN EXAMPLE REPO IN 430
@@ -29,24 +30,38 @@ const addDeck = (request, response) => {
 
     mtg.card.where({ name: bodyParams.cardName, pageSize: 1 })
       .then((cards) => {
-        const cardName = cards[0].name;
-        const cardText = cards[0].text;
-        // Check if the deck already exists in our database.
-        for (let i = 0; i < getHandler.decks.length; i++) {
-          if (getHandler.decks[i].deckName === bodyParams.deckName) {
-            existingDeckIndex = i;
-          }
+        if (cards === undefined) {
+          response.writeHead(400, { 'Content-Type': 'application/json' });
+          const responseObj = {
+            message: 'Card does not exist.',
+            id: 'cardNotReal',
+          };
+          response.write(JSON.stringify(responseObj));
+          response.end();
         }
+        else {
+          const cardName = cards[0].name;
+          const cardText = cards[0].text;
+          // Check if the deck already exists in our database.
+          for (let i = 0; i < getHandler.decks.length; i++) {
+            if (getHandler.decks[i].deckName === bodyParams.deckName) {
+              existingDeckIndex = i;
+            }
+          }
+  
+          if (existingDeckIndex >= 0) { // If the user already exists, update them.
+            const deck = getHandler.decks[existingDeckIndex];
+            let cardIndex = -1;
+            // Check if the added card already exists. If not, add it.
+            for (let j = 0; j < deck.deckList.length; j++) {
+              if (deck.deckList[j].cardName === cardName){
+                cardIndex=j;
+              }
+            }
 
-        if (existingDeckIndex >= 0) { // If the user already exists, update them.
-          const deck = getHandler.decks[existingDeckIndex];
-          let inDeck = false;
-          // Check if the added card already exists. If not, add it.
-          for (let j = 0; j < deck.deckList.length; j++) {
-            if (deck.deckList[j].cardName === cardName && inDeck === false) {
-              getHandler.decks[existingDeckIndex].deckList[j].quantity++;
-              inDeck = true;
-            } else if (inDeck === false) {
+            if (cardIndex>=0) {
+              getHandler.decks[existingDeckIndex].deckList[cardIndex].quantity++;
+            } else {
               const newCard = {
                 cardName,
                 cardText,
@@ -54,36 +69,37 @@ const addDeck = (request, response) => {
               };
               getHandler.decks[existingDeckIndex].deckList.push(newCard);
             }
-          }
-          response.writeHead(201, { 'Content-Type': 'application/json' });
-          const jsonDeck = getHandler.decks[existingDeckIndex];
-          response.write(JSON.stringify(jsonDeck));
-          response.end();
-        } else if (bodyParams.deckName && bodyParams.cardName && existingDeckIndex === -1) {
-          // If both fields are full, create a new user.
-          const jsonDeck = {
-            deckName: bodyParams.deckName,
-            deckList: [
-              {
-                cardName,
-                cardText,
-                quantity: 1,
-              },
-            ],
-          };
-          getHandler.decks.push(jsonDeck);
-          console.dir(JSON.stringify(jsonDeck));
 
-          response.writeHead(201, { 'Content-Type': 'application/json' });
-          response.write(JSON.stringify(jsonDeck));
-          response.end();
-        } else { // If either fields are missing, return a 400 error.
-          response.writeHead(400, { 'Content-Type': 'application/json' });
-          const responseObj = {
-            message: 'Missing required deck parameters.',
-          };
-          response.write(JSON.stringify(responseObj));
-          response.end();
+            response.writeHead(201, { 'Content-Type': 'application/json' });
+            const jsonDeck = getHandler.decks[existingDeckIndex];
+            response.write(JSON.stringify(jsonDeck));
+            response.end();
+          } else if (bodyParams.deckName && bodyParams.cardName && existingDeckIndex === -1) {
+            // If both fields are full, create a new user.
+            const jsonDeck = {
+              deckName: bodyParams.deckName,
+              deckList: [
+                {
+                  cardName,
+                  cardText,
+                  quantity: 1,
+                },
+              ],
+            };
+            getHandler.decks.push(jsonDeck);
+            console.dir(JSON.stringify(jsonDeck));
+  
+            response.writeHead(201, { 'Content-Type': 'application/json' });
+            response.write(JSON.stringify(jsonDeck));
+            response.end();
+          } else { // If either fields are missing, return a 400 error.
+            response.writeHead(400, { 'Content-Type': 'application/json' });
+            const responseObj = {
+              message: 'Missing required deck parameters.',
+            };
+            response.write(JSON.stringify(responseObj));
+            response.end();
+          }
         }
       });
   });
