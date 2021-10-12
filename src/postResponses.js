@@ -1,6 +1,5 @@
 const query = require('querystring');
 const mtg = require('mtgsdk');
-const { card } = require('mtgsdk');
 const getHandler = require('./getResponses');
 
 const addDeck = (request, response) => {
@@ -85,7 +84,6 @@ const addDeck = (request, response) => {
               ],
             };
             getHandler.decks.push(jsonDeck);
-            console.dir(JSON.stringify(jsonDeck));
 
             response.writeHead(201, { 'Content-Type': 'application/json' });
             response.write(JSON.stringify(jsonDeck));

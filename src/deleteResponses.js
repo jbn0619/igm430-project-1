@@ -6,8 +6,6 @@ const deleteCard = (request, response) => {
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
 
-  console.log(params);
-
   // First, determine if the deck we're deleting a card from exists.
   let deckIndex = -1;
   let cardIndex = -1;

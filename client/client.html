@@ -17,8 +17,6 @@
     // Parse the decks out of any xhr content.
     const parseDeck = (xhr, content) => {
       const payload = JSON.parse(xhr.response);
-
-      console.log(payload);
     };
 
     const handleOpenDeckResponse = (xhr) => {
@@ -51,7 +49,6 @@
     };
 
     const openDeck = (e, deckName) => {
-      console.log(deckName);
       const xhr = new XMLHttpRequest();
       xhr.open('GET',`/openDeck?deckName=${deckName}`);
       xhr.setRequestHeader('Accept','application/json');
@@ -74,15 +71,12 @@
     }
 
     const initDeckBrowsing = (xhr) => {
-      console.log(xhr.response);
       let decks = JSON.parse(xhr.response);
       const browseContainer = document.querySelector('#browse');
-      console.log(decks.length);
 
       // If there are decks, then make open-deck cards for each one.
       if (decks.length > 0) {
         for(let i = 0; i < decks.length; i++) {
-          console.log(i);
           let deckName = decks[i].deckName;
 
           browseContainer.innerHTML += 
