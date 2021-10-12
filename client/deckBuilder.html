@@ -65,13 +65,18 @@
             const obj = JSON.parse(xhr.response);
             if (obj.deckList) {
               const deckList = obj.deckList;
+              // Load the deck name into the proper places
               h2.innerHTML=obj.deckName;
               deckListContainer.appendChild(h2);
+              document.querySelector('#deckNameInput').value = obj.deckName;
+
+              // Load the cards into a list.
               for (let i = 0; i < deckList.length; i++) {
                 const newCard = `
                   <li class="list-group-item">
-                  <button class="deleteCardBtn btn btn-outline-success my-2 my-sm-0">${deckList[i].cardName} #: ${deckList[i].quantity}</button>
-                  <p>${deckList[i].cardText}<p>
+                  <button class="deleteCardBtn btn btn-outline-success my-2 my-sm-0">${deckList[i].cardName}</button>
+                  <p># ${deckList[i].quantity}</p>
+                  <p>${deckList[i].cardText}</p>
                   </li>`;
                 deckListContainer.innerHTML += newCard;
               }
@@ -84,12 +89,17 @@
             const obj = JSON.parse(xhr.response);
             if (obj.deckList) {
               const deckList = obj.deckList;
+              // Load the deck name into the proper places
               h2.innerHTML=obj.deckName;
               deckListContainer.appendChild(h2);
+              document.querySelector('#deckNameInput').value = obj.deckName;
+
+              // Load the cards into a list.
               for (let i = 0; i < deckList.length; i++) {
                 const newCard = `
                   <li class="list-group-item">
-                  <button class="deleteCardBtn btn btn-outline-success my-2 my-sm-0">${deckList[i].cardName} #: ${deckList[i].quantity}</button>
+                  <button class="deleteCardBtn btn btn-outline-success my-2 my-sm-0">${deckList[i].cardName}</button>
+                  <p># ${deckList[i].quantity}</p>
                   <p>${deckList[i].cardText}<p>
                   </li>`;
                 deckListContainer.innerHTML += newCard;

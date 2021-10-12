@@ -6,7 +6,7 @@ const deleteCard = (request, response) => {
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
 
-  console.dir('DeleteCard called!');
+  console.log(params);
 
   // First, determine if the deck we're deleting a card from exists.
   let deckIndex = -1;
@@ -31,8 +31,7 @@ const deleteCard = (request, response) => {
       getHandler.decks[deckIndex].deckList.splice(cardIndex, 1);
     }
 
-    response.writeHead(204, { 'Content-Type': 'application/json' });
-    console.log(JSON.stringify(getHandler.decks[deckIndex]));
+    response.writeHead(200, { 'Content-Type': 'application/json' });
     response.write(JSON.stringify(getHandler.decks[deckIndex]));
     response.end();
   } else {
