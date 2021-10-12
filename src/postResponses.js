@@ -28,7 +28,7 @@ const addDeck = (request, response) => {
 
     mtg.card.where({ name: bodyParams.cardName, pageSize: 1 })
       .then((cards) => {
-        if (cards === undefined) {
+        if (cards.length === 0) {
           response.writeHead(400, { 'Content-Type': 'application/json' });
           const responseObj = {
             message: 'Card does not exist.',

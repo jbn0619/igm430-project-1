@@ -3,8 +3,8 @@ const buildResponseMeta = (request, response, status) => {
   response.end();
 };
 
-const getDecksMeta = (request, response) => buildResponseMeta(request, response, 200);
-const getAllDecksMeta = (request, response) => buildResponseMeta(request, response, 200);
+const getDecksMeta = (request, response) => buildResponseMeta(request, response, 204);
+const getAllDecksMeta = (request, response) => buildResponseMeta(request, response, 204);
 const getNotFoundMeta = (request, response) => buildResponseMeta(request, response, 404);
 
 module.exports = {
