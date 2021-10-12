@@ -1,9 +1,5 @@
 const decks = [];
 
-const mtg = require('mtgsdk');
-const url = require('url');
-const query = require('querystring');
-
 // Builds a response with a JSON object
 const buildJSON = (request, response, message, id) => {
   let jsonObj = {
@@ -24,25 +20,6 @@ const buildResponse = (request, response, responseString, status) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
   response.write(responseString);
   response.end();
-};
-
-const getCardName = (request, response) => {
-  let searchList = [];
-  const parsedUrl = url.parse(request.url);
-  const params = query.parse(parsedUrl.query);
-  if (params.cardName) {
-    mtg.card.all({ name: params.cardName, pageSize: 1 })
-      .on('data', (cards) => {
-        searchList = cards.name;
-      });
-    return buildResponse(request, response, JSON.stringify(searchList), 200);
-  }
-
-  const object = {
-    message: 'No card name was specified. Enter a card name and try again.',
-    id: 'missingParams',
-  };
-  return buildResponse(request, response, JSON.stringify(object), 400);
 };
 
 const getDecks = (request, response, deckName) => {
@@ -84,6 +61,5 @@ module.exports = {
   getNotFound,
   buildJSON,
   buildResponse,
-  getCardName,
   decks,
 };

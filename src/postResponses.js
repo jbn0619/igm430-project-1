@@ -2,7 +2,6 @@ const query = require('querystring');
 const mtg = require('mtgsdk');
 const { card } = require('mtgsdk');
 const getHandler = require('./getResponses');
-const htmlHandler = require('./htmlResponses');
 
 const addDeck = (request, response) => {
   // THIS SECTION OF THE CODE WAS TAKEN AND ADAPTED FROM AN EXAMPLE REPO IN 430
@@ -104,42 +103,6 @@ const addDeck = (request, response) => {
   });
 };
 
-// const searchDeck = (request, response) => {
-//
-// };
-
-const openDeck = (request, response) => {
-  const body = [];
-
-  // Check for errors.
-  request.on('error', (err) => {
-    console.dir(err);
-    response.statusCode = 400;
-    response.end();
-  });
-
-  // Bundle all the data bytes together.
-  request.on('data', (chunk) => {
-    body.push(chunk);
-  });
-
-  // Proccess our data now.
-  request.on('end', () => {
-    // Piece together the new user.
-    const bodyString = Buffer.concat(body).toString();
-    const bodyParams = query.parse(bodyString);
-
-    // Store the sent deck name into memory for use after the deck-builder page loads.
-    if (bodyParams.deckName) {
-      getHandler.sentDeckName = bodyParams.deckName;
-    }
-
-    // Next, load the deck builder page.
-    htmlHandler.getDeckBuilder(request, response);
-  });
-};
-
 module.exports = {
   addDeck,
-  openDeck,
 };
