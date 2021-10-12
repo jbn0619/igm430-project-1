@@ -65,7 +65,7 @@
 
       const getDirectOpenDeck = (e) => {
         const searchValue = document.getElementById('searchInput').value;
-        openDeck(searchValue);
+        openDeck(e, searchValue);
       };
       const getBuildPage = (e) => buildDeck(e);
 
@@ -89,7 +89,6 @@
           `<div class="card border border-primary" style="width: 10%">
             <div class="card-body">
               <h5 class="card-title openDeckTitle">${deckName}</h5>
-              <p class="card-text">An example card for decks when we enable browsing for them.</p>
               <button class="btn btn-primary openDeckBtn" >Open Deck</button>
             </div>
           </div>`;
