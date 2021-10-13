@@ -227,16 +227,16 @@
     };
 
     const initNavBar = () => {
-      const searchButton = document.getElementById('searchButton');
+      //const searchButton = document.getElementById('searchButton');
       const buildDeckButton = document.querySelector('.deckBuildBtn');
       const homeButton = document.querySelector('#homeBtn');
 
-      const getDirectOpenDeck = (e) => directOpenDeck(e);
+      //const getDirectOpenDeck = (e) => directOpenDeck(e);
       const getBuildPage = (e) => buildDeck(e);
       const getHomePage = (e) => homePage(e);
 
       homeButton.addEventListener('click', getHomePage);
-      searchButton.addEventListener('click', getDirectOpenDeck);
+      //searchButton.addEventListener('click', getDirectOpenDeck);
       buildDeckButton.addEventListener('click', getBuildPage);
     }
 
@@ -271,10 +271,12 @@
             <a class="nav-link deckBuildBtn" href="deckBuilder">Build Deck</a>
           </li>
         </ul>
+        <!--
         <form class="form-inline my-2 my-lg-0">
           <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Open Deck" aria-label="Search">
           <button id="searchButton" class="btn btn-outline-success my-2 my-sm-0" type="submit">Open Deck</button>
         </form>
+        -->
       </div>
     </nav>
   
