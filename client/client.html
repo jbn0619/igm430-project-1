@@ -61,7 +61,7 @@
       const buildDeckButton = document.querySelector('.deckBuildBtn');
 
       const getDirectOpenDeck = (e) => {
-        const deckName = document.getElementById('searchInput').value;
+        const deckName = document.querySelector('#searchInput').value;
         openDeck(e, deckName);
       };
       const getBuildPage = (e) => buildDeck(e);
@@ -128,7 +128,7 @@
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
-        <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Open Deck" aria-label="Search">
+        <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Open Deck">
         <button id="searchButton" class="btn btn-outline-success my-2 my-sm-0" type="submit">Open Deck</button>
       </form>
     </div>
