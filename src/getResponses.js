@@ -24,9 +24,12 @@ const buildResponse = (request, response, responseString, status) => {
   response.end();
 };
 
-const getDecks = (request, response) => {
+const getDecks = (request, response, deckName = '') => {
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
+  if (deckName !== '') {
+    params.deckName = deckName;
+  }
 
   for (let i = 0; i < decks.length; i++) {
     if (decks[i].deckName === params.deckName) {
