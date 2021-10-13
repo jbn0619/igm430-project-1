@@ -61,8 +61,9 @@
       const buildDeckButton = document.querySelector('.deckBuildBtn');
 
       const getDirectOpenDeck = (e) => {
-        const searchValue = document.getElementById('searchInput').value;
-        openDeck(e, searchValue);
+        const deckName = document.getElementById('searchInput').value;
+        console.log(deckName);
+        openDeck(e, deckName);
       };
       const getBuildPage = (e) => buildDeck(e);
 
