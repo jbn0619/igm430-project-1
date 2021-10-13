@@ -1,6 +1,5 @@
 const http = require('http');
 const url = require('url');
-const query = require('querystring');
 const htmlHandler = require('./htmlResponses');
 const getHandler = require('./getResponses');
 const postHandler = require('./postResponses');
@@ -42,10 +41,9 @@ const urlDictionary = {
 // Parses URL and determines what kind of operation the API is handling.
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
-  const params = query.parse(parsedUrl.query);
 
   if (urlDictionary[request.method][parsedUrl.pathname]) {
-    urlDictionary[request.method][parsedUrl.pathname](request, response, params[0]);
+    urlDictionary[request.method][parsedUrl.pathname](request, response);
   } else {
     urlDictionary[request.method].notFound(request, response);
   }

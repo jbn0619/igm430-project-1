@@ -13,29 +13,6 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
-    const handleResponse = (xhr) => {
-      const responseType = xhr.getResponseHeader('Content-Type');
-
-      // Determine what to do based-on the server's feedback of our request.
-      switch (xhr.status) {
-        case 200:
-
-          break;
-        case 201:
-
-          break;
-        case 204:
-
-          break;
-        case 400:
-
-          break;
-        case 404:
-
-          break;
-      }
-    };
-
     const deleteCard = (e, cardName) => {
       const deckName = document.getElementById('deckNameInput').value;
       const xhr = new XMLHttpRequest();
@@ -114,12 +91,30 @@
             h2.innerHTML=obj.message;
             deckListContainer.appendChild(h2);
           }
+          if(xhr.response !== null || xhr.response !== undefined){
+            const obj = JSON.parse(xhr.response);
+            if (obj.deckList) {
+              const deckList = obj.deckList;
+              // Load the deck name into the proper places
+              h2.innerHTML=obj.deckName;
+              deckListContainer.appendChild(h2);
+              document.querySelector('#deckNameInput').value = obj.deckName;
+
+              // Load the cards into a list.
+              for (let i = 0; i < deckList.length; i++) {
+                const newCard = `
+                  <li class="list-group-item">
+                  <button class="deleteCardBtn btn btn-outline-success my-2 my-sm-0">${deckList[i].cardName}</button>
+                  <p># ${deckList[i].quantity}</p>
+                  <p>${deckList[i].cardText}</p>
+                  </li>`;
+                deckListContainer.innerHTML += newCard;
+              }
+            }
+            addCardClickEvent();
+            }
           break;
       }
-    };
-
-    const handleDeleteResponse = (xhr) => {
-
     };
 
     const handleHomePageResponse = (xhr) => {
@@ -150,6 +145,7 @@
       const searchValue = document.getElementById('searchInput').value;
 
       const xhr = new XMLHttpRequest();
+      console.log(searchValue);
       xhr.open('GET', `/openDeck?deckName=${searchValue}`);
       xhr.setRequestHeader('Accept', 'application/json');
       xhr.onload = () => handleOpenDeckResponse(xhr,'/deckBuilder');

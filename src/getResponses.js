@@ -1,4 +1,6 @@
 const decks = [];
+const url = require('url');
+const query = require('querystring');
 
 // Builds a response with a JSON object
 const buildJSON = (request, response, message, id) => {
@@ -22,14 +24,17 @@ const buildResponse = (request, response, responseString, status) => {
   response.end();
 };
 
-const getDecks = (request, response, deckName) => {
+const getDecks = (request, response) => {
+  const parsedUrl = url.parse(request.url);
+  const params = query.parse(parsedUrl.query);
+
   for (let i = 0; i < decks.length; i++) {
-    if (decks[i].deckName === deckName) {
+    if (decks[i].deckName === params.deckName) {
       return buildResponse(request, response, JSON.stringify(decks[i]), 200);
     }
   }
 
-  if (!deckName) {
+  if (!params.deckName) {
     const object = {
       message: 'No deckname was specified. Enter a deckname and try again.',
       id: 'missingParams',
@@ -37,7 +42,7 @@ const getDecks = (request, response, deckName) => {
     return buildResponse(request, response, JSON.stringify(object), 400);
   }
   const object = {
-    message: `The deck ${deckName} does not exist.`,
+    message: `The deck ${params.deckName} does not exist.`,
     id: 'noObjectExists',
   };
   return buildResponse(request, response, JSON.stringify(object), 400);
